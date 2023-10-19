@@ -1,0 +1,8 @@
+# 默认忽略的文件，自己IDE或者编辑器的配置需要忽略
+.idea/
+.vscode/
+
+lhy/*.exe
+lhy/.vs/
+lhy/.vscode/
+lhy/x64/

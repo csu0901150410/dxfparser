@@ -30,4 +30,5 @@ DXF是AutoCAD的绘图交换文件，可以理解为一种描述图形的文本�
 
 ### 备忘录
 
-- 使用GDI图形绘制构建界面，参考链接：[GDI+入门](https://learn.microsoft.com/zh-cn/windows/win32/gdiplus/-gdiplus-getting-started-use)。
+- 使用GDI图形绘制构建界面，参考链接：[GDI+入门](https://learn.microsoft.com/zh-cn/windows/win32/gdiplus/-gdiplus-getting-started-use)、[Windows GDI+ 编程手册](http://www.yfvb.com/help/gdiplus/index.htm)。
+
