@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)gui\3rdparty\HiEasyX;$(SolutionDir)gui\3rdparty\HiEasyX\HiEasyX</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)gui\3rdparty\HiEasyX;$(SolutionDir)gui\3rdparty\HiEasyX\HiEasyX</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)gui\3rdparty\HiEasyX;$(SolutionDir)gui\3rdparty\HiEasyX\HiEasyX</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,6 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)gui\3rdparty\HiEasyX;$(SolutionDir)gui\3rdparty\HiEasyX\HiEasyX</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,7 +131,68 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiCanvas.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiContainer.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiDrawingProperty.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiFPS.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiFunc.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGdiplus.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGif.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGUI\Button.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGUI\ControlBase.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGUI\Page.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGUI\ProgressCtrl.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGUI\ScrollBar.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiGUI\Static.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiIcon.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiMouseDrag.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiMusicMCI.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiStart.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysButton.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysCheckBox.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysComboBox.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysControlBase.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysEdit.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysGroup.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysGroupBox.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysRadioButton.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysStatic.cpp" />
+    <ClCompile Include="3rdparty\HiEasyX\HiEasyX\HiWindow.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiCanvas.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiContainer.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiDef.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiDrawingProperty.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiFPS.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiFunc.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGdiplus.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGif.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\Button.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\ControlBase.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\HiGUI.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\Page.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\ProgressCtrl.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\ScrollBar.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiGUI\Static.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiIcon.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiMacro.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiMouseDrag.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiMusicMCI.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiStart.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\HiSysGUI.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysButton.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysCheckBox.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysComboBox.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysControlBase.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysEdit.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysGroup.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysGroupBox.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysRadioButton.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiSysGUI\SysStatic.h" />
+    <ClInclude Include="3rdparty\HiEasyX\HiEasyX\HiWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,32 +1,23 @@
 #include <easyx.h>
 #include <conio.h>
 
-// Reference : https://docs.easyx.cn/zh-cn/intro
+#include "HiEasyX.h"
 
 int main()
 {
+	initgraph();			// 初始化窗口
 
-    initgraph(800, 600);
+	BEGIN_TASK();			// （不同于 EasyX）启动任务，标识开始绘制
 
-    setbkcolor(BLACK);
-    cleardevice();
+	circle(320, 240, 100);	// 画圆
 
-    setlinecolor(WHITE);
+	END_TASK();				// （不同于 EasyX）完成绘制，结束任务
 
-    circle(800 / 2, 600 / 2, 100);
+	REDRAW_WINDOW();		// （不同于 EasyX）刷新屏幕，使刚才绘制的内容显示出来
 
-    // BeginBatchDraw();
-    // FlushBatchDraw();
-    // EndBatchDraw();
+	getmessage(EM_KEY);		// 任意键退出
 
-    while (1)
-    {
-        if (_kbhit())
-            break;
-    }
-
-    closegraph();
-
-    return 0;
+	closegraph();			// 关闭窗口
+	return 0;
 }
 
