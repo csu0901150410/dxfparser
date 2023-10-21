@@ -1,17 +1,23 @@
 #include <graphics.h>		// 引用图形库头文件
 #include <conio.h>
+#include <iostream>
+
+#include "lsCanvas.h"
 
 int main()
 {
-	initgraph(640, 480);	// 创建绘图窗口，大小为 640x480 像素
-	circle(200, 200, 100);	// 画圆，圆心(200, 200)，半径 100
+	lsCanvas canvas;
 
-	while (1)
-	{
-		if (_kbhit())
-			break;
-	}
+	std::cout << "Press any key to exit..." << std::endl;
+	
+	ls_canvas_init(&canvas, 800, 600);
 
-	closegraph();			// 关闭绘图窗口
+	// 加实体
+	ls_canvas_add_entity(&canvas, ls_entity_make_line(100, 500, 300, 500));
+	ls_canvas_add_entity(&canvas, ls_entity_make_circle(300, 300, 150));
+
+	ls_canvas_polling(&canvas);
+	ls_canvas_destroy(&canvas);
+
 	return 0;
 }
