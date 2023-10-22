@@ -1,7 +1,10 @@
 #ifndef LS_ENTITY_H
 #define LS_ENTITY_H
 
-typedef double lsReal;
+#define _CRT_SECURE_NO_WARNINGS
+
+#include "lsPoint.h"
+#include "lsLine.h"
 
 typedef enum
 {
@@ -12,18 +15,6 @@ typedef enum
     kCircle,
     kXLine
 } EntityType;
-
-typedef struct
-{
-    lsReal x;
-    lsReal y;
-} lsPoint;
-
-typedef struct
-{
-    lsPoint s;
-    lsPoint e;
-} lsLine;
 
 typedef struct
 {

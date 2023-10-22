@@ -8,3 +8,5 @@ lhy/.vscode/
 lhy/x64/
 lhy/gui/x64/
 res/
+
+!lhy/res/

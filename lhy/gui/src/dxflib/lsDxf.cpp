@@ -1,0 +1,174 @@
+#include "lsDxf.h"
+
+#include <string.h>
+#include <stdlib.h>
+
+// init the lsDxf structure and open the DXF file
+bool ls_dxf_init(lsDxf *dxf, const char *filepath)
+{
+    memset(dxf->stringLine, '\0', sizeof(dxf->stringLine));
+
+    dxf->fp = fopen(filepath, "r");
+    if (!dxf->fp)
+    {
+        printf("DXF file load failed\n");
+        return false;
+    }
+
+    return true;
+}
+
+// read a line string from the dxf file stream
+bool ls_dxf_get_line(lsDxf *dxf)
+{
+    if (NULL == fgets(dxf->stringLine, sizeof(dxf->stringLine), dxf->fp))
+        return false;
+
+    char tmp[1024];
+    size_t len = strlen(dxf->stringLine);
+
+    int j = 0;
+    bool non_whitespace_found = false;
+
+    // 1. trim the ' ' and '\t' at the begining of the string
+    // 2. ignore the return character in the string
+    for (size_t i = 0; i < len; ++i)
+    {
+        char c = dxf->stringLine[i];
+        if (non_whitespace_found || (' ' != c && '\t' != c))
+        {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+            if ('\r' != c && '\n' != c)
+                tmp[j++] = c;
+
+            non_whitespace_found = true;
+#else
+            if ('\r' != c)
+                tmp[j++] = c;
+
+            non_whitespace_found = true;
+#endif
+        }
+    }
+
+    tmp[j] = 0;
+    strcpy(dxf->stringLine, tmp);
+}
+
+// read the entity::line form the dxf file
+bool ls_dxf_read_entity_line(lsDxf *dxf)
+{
+    lsPoint s = {0, 0, 0};
+    lsPoint e = {0, 0, 0};
+
+    while (!feof(dxf->fp))
+    {
+        ls_dxf_get_line(dxf);
+
+        // try to read a number
+        int n;
+        if (1 != sscanf(dxf->stringLine, "%d", &n))
+        {
+            printf("ls_dxf_read_entity_line failed to read integer from '%s'\n", dxf->stringLine);
+            return false;
+        }
+
+        // recognize the group code
+        switch (n)
+        {
+        case 0:
+            // now, we get a group '0', finish read line
+            lsLine line;
+            line.s = s;
+            line.e = e;
+            dxf->lines.push_back(line);
+            return true;
+
+        case 10:
+            // start point x
+            ls_dxf_get_line(dxf);
+            s.x = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 20:
+            // start point y
+            ls_dxf_get_line(dxf);
+            s.y = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 30:
+            // start point z
+            ls_dxf_get_line(dxf);
+            s.z = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 11:
+            // end point x
+            ls_dxf_get_line(dxf);
+            e.x = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 21:
+            // end point y
+            ls_dxf_get_line(dxf);
+            e.y = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 31:
+            // end point z
+            ls_dxf_get_line(dxf);
+            e.z = strtod(dxf->stringLine, NULL);
+            break;
+
+        default:
+            ls_dxf_get_line(dxf);// skip next line
+            break;
+        }
+    }
+
+    // should be return in the 'case 0'
+    return false;
+}
+
+// parse DXF file
+void ls_dxf_parse(lsDxf *dxf)
+{
+    if (!ls_dxf_get_line(dxf))
+        return;
+
+    while (!feof(dxf->fp))
+    {
+        // group code '0' indicating the entity type
+        if (!strcmp("0", dxf->stringLine))
+        {
+            ls_dxf_get_line(dxf);
+
+            // indicating the entity::line
+            if (!strcmp("LINE", dxf->stringLine))
+            {
+                if (!ls_dxf_read_entity_line(dxf))
+                {
+                    printf("ls_dxf_do_read failed to read line\n");
+                    return;
+                }
+
+                // move on to the next group code '0' we got
+                continue;
+            }
+        }
+
+        // read next line
+        ls_dxf_get_line(dxf);
+    }
+}
+
+// show the entity information after the DXF has been parsed
+void ls_dxf_result_print(lsDxf *dxf)
+{
+    for (size_t i = 0; i < dxf->lines.size(); ++i)
+    {
+        const lsLine *pl = &dxf->lines[i];
+        printf("Entity::Line [s(%.3f, %.3f) - e(%.3f, %.3f)]\n",
+            pl->s.x, pl->s.y, pl->e.x, pl->e.y);
+    }
+}

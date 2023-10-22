@@ -1,6 +1,8 @@
 #ifndef LS_CANVAS_H
 #define LS_CANVAS_H
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <graphics.h>
 #include <vector>
 
