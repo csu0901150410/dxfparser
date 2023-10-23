@@ -20,6 +20,8 @@ typedef struct
 
 void ls_canvas_init(lsCanvas *canvas, int w, int h);
 
+void ls_canvas_load_entity(lsCanvas *canvas, std::vector<lsEntity> *entitys);
+
 void ls_canvas_add_entity(lsCanvas *canvas, lsEntity entity);
 
 void ls_canvas_flush(lsCanvas *canvas);

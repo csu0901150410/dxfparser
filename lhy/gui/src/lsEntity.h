@@ -5,6 +5,8 @@
 
 #include "lsPoint.h"
 #include "lsLine.h"
+#include "lsCircle.h"
+#include "lsBoundbox.h"
 
 typedef enum
 {
@@ -15,12 +17,6 @@ typedef enum
     kCircle,
     kXLine
 } EntityType;
-
-typedef struct
-{
-    lsPoint center;
-    lsReal radius;
-} lsCircle;
 
 typedef union
 {
@@ -35,9 +31,38 @@ typedef struct
     EntityData data;
 } lsEntity;
 
-lsEntity ls_entity_make_point(lsReal vx, lsReal vy);
-lsEntity ls_entity_make_line(lsReal x1, lsReal y1, lsReal x2, lsReal y2);
-// lsEntity ls_entity_make_line(lsPoint ps, lsPoint pe);
-lsEntity ls_entity_make_circle(lsReal cx, lsReal cy, lsReal r);
+/**
+ * @brief Convert lsPoint to lsEntity
+ * 
+ * @param point pointer to point
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_point(lsPoint *point);
+
+/**
+ * @brief Convert lsLine to lsEntity
+ * 
+ * @param line pointer to line
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_line(lsLine *line);
+
+/**
+ * @brief Convert lsCircle to lsEntity
+ * 
+ * @param circle pointer to circle
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_circle(lsCircle *circle);
+
+/**
+ * @brief Get the boundbox of the entity
+ * 
+ * @param entity 
+ * @return lsBoundbox 
+ */
+lsBoundbox ls_entity_get_boundbox(lsEntity *entity);
+
+lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley);
 
 #endif // LS_ENTITY_H

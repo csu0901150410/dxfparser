@@ -16,13 +16,9 @@ int main()
 	ls_dxf_result_print(&dxflib);
 
 	lsCanvas canvas;
-
-	std::cout << "Press any key to exit..." << std::endl;
-	
 	ls_canvas_init(&canvas, 800, 600);
 
-	ls_canvas_add_entity(&canvas, ls_entity_make_line(100, 500, 300, 500));
-	ls_canvas_add_entity(&canvas, ls_entity_make_circle(300, 300, 150));
+	ls_canvas_load_entity(&canvas, &dxflib.entitys);
 
 	ls_canvas_polling(&canvas);
 	ls_canvas_destroy(&canvas);

@@ -1,53 +1,96 @@
 #include "lsEntity.h"
 
-lsEntity ls_entity_make_point(lsReal vx, lsReal vy)
+/**
+ * @brief Convert lsPoint to lsEntity
+ * 
+ * @param point pointer to point
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_point(lsPoint *point)
 {
     lsEntity entity;
-
-    lsPoint pt;
-    pt.x = vx;
-    pt.y = vy;
-
     entity.type = kPoint;
-    entity.data.point = pt;
-
+    entity.data.point = *point;
     return entity;
 }
 
-lsEntity ls_entity_make_line(lsReal x1, lsReal y1, lsReal x2, lsReal y2)
+/**
+ * @brief Convert lsLine to lsEntity
+ * 
+ * @param line pointer to line
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_line(lsLine *line)
 {
     lsEntity entity;
-
-    lsPoint ps, pe;
-    ps.x = x1;
-    ps.y = y1;
-    pe.x = x2;
-    pe.y = y2;
-
-    lsLine l;
-    l.s = ps;
-    l.e = pe;
-
     entity.type = kLine;
-    entity.data.line = l;
-
+    entity.data.line = *line;
     return entity;
 }
 
-lsEntity ls_entity_make_circle(lsReal cx, lsReal cy, lsReal r)
+/**
+ * @brief Convert lsCircle to lsEntity
+ * 
+ * @param circle pointer to circle
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_circle(lsCircle *circle)
 {
     lsEntity entity;
-
-    lsPoint center;
-    center.x = cx;
-    center.y = cy;
-    
-    lsCircle cir;
-    cir.center = center;
-    cir.radius = r;
-
     entity.type = kCircle;
-    entity.data.circle = cir;
-
+    entity.data.circle = *circle;
     return entity;
+}
+
+/**
+ * @brief Get the boundbox of the entity
+ * 
+ * @param entity 
+ * @return lsBoundbox 
+ */
+lsBoundbox ls_entity_get_boundbox(lsEntity *entity)
+{
+    lsBoundbox box;
+
+    switch (entity->type)
+    {
+    case kLine:
+        box = ls_line_get_boundbox(&entity->data.line);
+        break;
+
+    case kCircle:
+        box = ls_circle_get_boundbox(&entity->data.circle);
+        break;
+
+    default:
+        break;
+    }
+
+    return box;
+}
+
+lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
+{
+    lsEntity ent;
+    lsLine line;
+    lsCircle circle;
+
+    switch (entity->type)
+    {
+    case kLine:
+        line = ls_line_scale(&entity->data.line, scalex, scaley);
+        ent = ls_entity_convert_line(&line);
+        break;
+
+    case kCircle:
+        circle = ls_circle_scale(&entity->data.circle, scalex);
+        ent = ls_entity_convert_circle(&circle);
+        break;
+
+    default:
+        ent.type = kUnknown;
+        break;
+    }
+
+    return ent;
 }

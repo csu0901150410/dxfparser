@@ -133,11 +133,16 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\dxflib\lsDxf.cpp" />
+    <ClCompile Include="src\entity\lsBoundbox.cpp" />
+    <ClCompile Include="src\entity\lsCircle.cpp" />
+    <ClCompile Include="src\entity\lsLine.cpp" />
     <ClCompile Include="src\lsCanvas.cpp" />
     <ClCompile Include="src\lsEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dxflib\lsDxf.h" />
+    <ClInclude Include="src\entity\lsBoundbox.h" />
+    <ClInclude Include="src\entity\lsCircle.h" />
     <ClInclude Include="src\entity\lsLine.h" />
     <ClInclude Include="src\entity\lsPoint.h" />
     <ClInclude Include="src\lsCanvas.h" />

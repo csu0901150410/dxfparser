@@ -53,6 +53,7 @@ bool ls_dxf_get_line(lsDxf *dxf)
 
     tmp[j] = 0;
     strcpy(dxf->stringLine, tmp);
+    return true;
 }
 
 // read the entity::line form the dxf file
@@ -81,7 +82,7 @@ bool ls_dxf_read_entity_line(lsDxf *dxf)
             lsLine line;
             line.s = s;
             line.e = e;
-            dxf->lines.push_back(line);
+            dxf->entitys.push_back(ls_entity_convert_line(&line));
             return true;
 
         case 10:
@@ -130,6 +131,69 @@ bool ls_dxf_read_entity_line(lsDxf *dxf)
     return false;
 }
 
+// read the entity::circle form the dxf file
+bool ls_dxf_read_entity_circle(lsDxf *dxf)
+{
+    lsReal radius = 0.0;
+    lsPoint center = {0.0, 0.0, 0.0};
+
+    while (!feof(dxf->fp))
+    {
+        ls_dxf_get_line(dxf);
+
+        // try to read a number
+        int n;
+        if (1 != sscanf(dxf->stringLine, "%d", &n))
+        {
+            printf("ls_dxf_read_entity_circle failed to read integer from '%s'\n", dxf->stringLine);
+            return false;
+        }
+
+        // recognize the group code
+        switch (n)
+        {
+        case 0:
+            // now, we get a group '0', finish read circle
+            lsCircle circle;
+            circle.c = center;
+            circle.r = radius;
+            dxf->entitys.push_back(ls_entity_convert_circle(&circle));
+            return true;
+
+        case 10:
+            // center x
+            ls_dxf_get_line(dxf);
+            center.x = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 20:
+            // center y
+            ls_dxf_get_line(dxf);
+            center.y = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 30:
+            // center z
+            ls_dxf_get_line(dxf);
+            center.z = strtod(dxf->stringLine, NULL);
+            break;
+
+        case 40:
+            // radius
+            ls_dxf_get_line(dxf);
+            radius = strtod(dxf->stringLine, NULL);
+            break;
+
+        default:
+            ls_dxf_get_line(dxf);// skip next line
+            break;
+        }
+    }
+
+    // should be return in the 'case 0'
+    return false;
+}
+
 // parse DXF file
 void ls_dxf_parse(lsDxf *dxf)
 {
@@ -155,6 +219,18 @@ void ls_dxf_parse(lsDxf *dxf)
                 // move on to the next group code '0' we got
                 continue;
             }
+
+            else if (!strcmp("CIRCLE", dxf->stringLine))
+            {
+                if (!ls_dxf_read_entity_circle(dxf))
+                {
+                    printf("ls_dxf_do_read failed to read circle\n");
+                    return;
+                }
+
+                // move on to the next group code '0' we got
+                continue;
+            }
         }
 
         // read next line
@@ -165,10 +241,21 @@ void ls_dxf_parse(lsDxf *dxf)
 // show the entity information after the DXF has been parsed
 void ls_dxf_result_print(lsDxf *dxf)
 {
-    for (size_t i = 0; i < dxf->lines.size(); ++i)
+    for (size_t i = 0; i < dxf->entitys.size(); ++i)
     {
-        const lsLine *pl = &dxf->lines[i];
-        printf("Entity::Line [s(%.3f, %.3f) - e(%.3f, %.3f)]\n",
-            pl->s.x, pl->s.y, pl->e.x, pl->e.y);
+        const lsEntity *ent = &dxf->entitys[i];
+
+        switch (ent->type)
+        {
+        case kLine:
+            printf("Entity::Line [s(%.3f, %.3f) - e(%.3f, %.3f)]\n",
+                ent->data.line.s.x, ent->data.line.s.y, ent->data.line.e.x, ent->data.line.e.y);
+            break;
+
+        case kCircle:
+            printf("Entity::Circle [c(%.3f, %.3f) - r(%.3f)]\n",
+                ent->data.circle.c.x, ent->data.circle.c.y, ent->data.circle.r);
+            break;
+        }
     }
 }

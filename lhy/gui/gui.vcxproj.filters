@@ -33,6 +33,15 @@
     <ClCompile Include="src\dxflib\lsDxf.cpp">
       <Filter>dxflib</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\lsBoundbox.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsCircle.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsLine.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
@@ -48,6 +57,12 @@
       <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\lsPoint.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsBoundbox.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsCircle.h">
       <Filter>entity</Filter>
     </ClInclude>
   </ItemGroup>

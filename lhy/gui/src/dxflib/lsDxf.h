@@ -9,6 +9,8 @@
 
 #include "lsPoint.h"
 #include "lsLine.h"
+#include "lsCircle.h"
+#include "lsEntity.h"
 
 typedef struct
 {
@@ -17,7 +19,7 @@ typedef struct
     char stringLine[1024];// DXF文件行字符串
 
     // extract data
-    std::vector<lsLine> lines;// entity::line data
+    std::vector<lsEntity> entitys;// array of entitys
 } lsDxf;
 
 bool ls_dxf_init(lsDxf *dxf, const char *filepath);
@@ -25,6 +27,8 @@ bool ls_dxf_init(lsDxf *dxf, const char *filepath);
 bool ls_dxf_get_line(lsDxf *dxf);
 
 bool ls_dxf_read_entity_line(lsDxf *dxf);
+
+bool ls_dxf_read_entity_circle(lsDxf *dxf);
 
 void ls_dxf_parse(lsDxf *dxf);
 
