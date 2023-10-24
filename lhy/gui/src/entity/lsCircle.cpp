@@ -12,6 +12,15 @@ lsBoundbox ls_circle_get_boundbox(lsCircle *circle)
 lsCircle ls_circle_scale(const lsCircle *circle, lsReal scale)
 {
     lsCircle cir = *circle;
-    cir.r *= scale;// 考虑xy的话就变成椭圆了
+    cir.r *= scale;// 鑰冭檻xy鐨勮瘽灏卞彉鎴愭き鍦嗕簡
+    return cir;
+}
+
+lsCircle ls_circle_translate(const lsCircle *circle, const lsPoint *vector)
+{
+    lsCircle cir;
+    cir.c.x = circle->c.x + vector->x;
+    cir.c.y = circle->c.y + vector->y;
+    cir.r = circle->r;
     return cir;
 }

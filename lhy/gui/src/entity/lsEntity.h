@@ -65,4 +65,6 @@ lsBoundbox ls_entity_get_boundbox(lsEntity *entity);
 
 lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley);
 
+lsEntity ls_entity_translate(const lsEntity *entity, const lsPoint *vector);
+
 #endif // LS_ENTITY_H

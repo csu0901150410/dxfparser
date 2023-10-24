@@ -27,9 +27,6 @@
     <ClCompile Include="src\lsCanvas.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\lsEntity.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\dxflib\lsDxf.cpp">
       <Filter>dxflib</Filter>
     </ClCompile>
@@ -42,12 +39,12 @@
     <ClCompile Include="src\entity\lsLine.cpp">
       <Filter>entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\lsEntity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lsEntity.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="src\dxflib\lsDxf.h">
@@ -63,6 +60,9 @@
       <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\lsCircle.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsEntity.h">
       <Filter>entity</Filter>
     </ClInclude>
   </ItemGroup>

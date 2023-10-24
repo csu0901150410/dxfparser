@@ -72,19 +72,41 @@ lsBoundbox ls_entity_get_boundbox(lsEntity *entity)
 lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
 {
     lsEntity ent;
-    lsLine line;
-    lsCircle circle;
 
     switch (entity->type)
     {
     case kLine:
-        line = ls_line_scale(&entity->data.line, scalex, scaley);
-        ent = ls_entity_convert_line(&line);
+        ent.data.line = ls_line_scale(&entity->data.line, scalex, scaley);
+        ent = ls_entity_convert_line(&ent.data.line);
         break;
 
     case kCircle:
-        circle = ls_circle_scale(&entity->data.circle, scalex);
-        ent = ls_entity_convert_circle(&circle);
+        ent.data.circle = ls_circle_scale(&entity->data.circle, scalex);
+        ent = ls_entity_convert_circle(&ent.data.circle);
+        break;
+
+    default:
+        ent.type = kUnknown;
+        break;
+    }
+
+    return ent;
+}
+
+lsEntity ls_entity_translate(const lsEntity *entity, const lsPoint *vector)
+{
+    lsEntity ent;
+
+    switch (entity->type)
+    {
+    case kLine:
+        ent.data.line = ls_line_translate(&entity->data.line, vector);
+        ent = ls_entity_convert_line(&ent.data.line);
+        break;
+        
+    case kCircle:
+        ent.data.circle = ls_circle_translate(&entity->data.circle, vector);
+        ent = ls_entity_convert_circle(&ent.data.circle);
         break;
 
     default:

@@ -72,3 +72,11 @@ lsReal ls_boundbox_height(lsBoundbox *box)
 {
     return box->top - box->bottom;
 }
+
+lsPoint ls_boundbox_center(lsBoundbox *box)
+{
+    lsPoint center;
+    center.x = box->left + ls_boundbox_width(box) / 2;
+    center.y = box->bottom + ls_boundbox_height(box) / 2;
+    return center;
+}

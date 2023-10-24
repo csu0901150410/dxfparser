@@ -4,9 +4,9 @@
 #include "lsBoundbox.h"
 
 /**
- * @brief ³õÊ¼»¯»­²¼¡£Æô¶¯´°¿Ú¡£
+ * @brief åˆå§‹åŒ–ç”»å¸ƒã€‚å¯åŠ¨çª—å£ã€‚
  * 
- * @param canvas »­²¼Ö¸Õë
+ * @param canvas ç”»å¸ƒæŒ‡é’ˆ
  */
 void ls_canvas_init(lsCanvas *canvas, int w, int h)
 {
@@ -20,10 +20,10 @@ void ls_canvas_init(lsCanvas *canvas, int w, int h)
 }
 
 /**
- * @brief ´ÓÊµÌåÊı×éÍù»­²¼¼ÓÔØÊµÌå
+ * @brief ä»å®ä½“æ•°ç»„å¾€ç”»å¸ƒåŠ è½½å®ä½“
  * 
- * @param canvas »­²¼Ö¸Õë
- * @param entitys ÊµÌåÊı×éÖ¸Õë
+ * @param canvas ç”»å¸ƒæŒ‡é’ˆ
+ * @param entitys å®ä½“æ•°ç»„æŒ‡é’ˆ
  */
 void ls_canvas_load_entity(lsCanvas *canvas, std::vector<lsEntity> *entitys)
 {
@@ -33,7 +33,7 @@ void ls_canvas_load_entity(lsCanvas *canvas, std::vector<lsEntity> *entitys)
 }
 
 /**
- * @brief »­²¼Ìí¼ÓÊµÌå
+ * @brief ç”»å¸ƒæ·»åŠ å®ä½“
  * 
  * @param canvas 
  * @param entity 
@@ -44,11 +44,11 @@ void ls_canvas_add_entity(lsCanvas *canvas, lsEntity entity)
         return;
 
     canvas->entitys.push_back(entity);
-    canvas->bDirty = true;// Êı¾İÔàÁË£¬ĞèÒªÖØĞÂ»æÖÆ£¬»áÈ«²¿ÖØ»æ
+    canvas->bDirty = true;// æ•°æ®è„äº†ï¼Œéœ€è¦é‡æ–°ç»˜åˆ¶ï¼Œä¼šå…¨éƒ¨é‡ç»˜
 }
 
 /**
- * @brief »­²¼Ë«»º³å»æÍ¼Ë¢ĞÂ¡£²¢²»ÊÇÖØ»æ¡£
+ * @brief ç”»å¸ƒåŒç¼“å†²ç»˜å›¾åˆ·æ–°ã€‚å¹¶ä¸æ˜¯é‡ç»˜ã€‚
  * 
  * @param canvas 
  */
@@ -59,7 +59,7 @@ void ls_canvas_flush(lsCanvas *canvas)
 }
 
 /**
- * @brief »­²¼ÖØ»æ
+ * @brief ç”»å¸ƒé‡ç»˜
  * 
  * @param canvas 
  */
@@ -68,9 +68,9 @@ void ls_canvas_redraw(lsCanvas *canvas)
     if (!canvas)
         return;
     if (!canvas->bDirty)
-        return;// ²»Ôà¾Í²»»æÖÆÁË
+        return;// ä¸è„å°±ä¸ç»˜åˆ¶äº†
 
-    // ÏÈÇó³öÈ«²¿ÊµÌåµÄ±ß½çºĞ
+    // å…ˆæ±‚å‡ºå…¨éƒ¨å®ä½“çš„è¾¹ç•Œç›’
     lsBoundbox box;
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
@@ -78,10 +78,14 @@ void ls_canvas_redraw(lsCanvas *canvas)
         box = ls_boundbox_combine(&box, &subbox);
     }
 
-    // ¼ÆËãÆ½ÒÆÏòÁ¿ºÍËõ·ÅÏµÊı
-    lsPoint origin = ls_boundbox_min(&box);
-    origin.x = -origin.x;
-    origin.y = -origin.y;
+    // å›¾å½¢ä¸­å¿ƒå¹³ç§»åˆ°å’Œçª—å£ä¸­å¿ƒé‡åˆ
+
+    lsPoint windowCenter = {canvas->w / 2, canvas->h / 2};
+    lsPoint boxCenter = ls_boundbox_center(&box);
+    lsPoint translate;
+    translate.x = windowCenter.x - boxCenter.x;
+    translate.y = windowCenter.y - boxCenter.y;
+
     lsReal boxw = ls_boundbox_width(&box), boxh = ls_boundbox_height(&box);
     lsReal scalex = boxw / canvas->w, scaley = boxh / canvas->h;
     lsReal scale = MAX(scalex, scaley);
@@ -89,17 +93,23 @@ void ls_canvas_redraw(lsCanvas *canvas)
 
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
-        lsEntity entity = ls_entity_scale(&canvas->entitys[i], scale, scale);
+        lsEntity entity = canvas->entitys[i];
+        entity = ls_entity_translate(&entity, &translate);// å¹³ç§»ä½¿å¾—å›¾å½¢ä¸­å¿ƒå’Œçª—å£ä¸­å¿ƒé‡åˆ
+        entity = ls_entity_scale(&entity, scale, scale);// ç¼©æ”¾ä½¿å¾—æ•´ä¸ªå›¾å½¢åœ¨çª—å£èŒƒå›´å¯è§
 
+        // çª—å£åæ ‡åŸç‚¹åœ¨å·¦ä¸Šè§’ï¼ŒXè½´æ­£æ–¹å‘æ˜¯å‘å³ï¼ŒYè½´æ­£æ–¹å‘æ˜¯å‘ä¸‹ï¼Œè€Œå›¾å…ƒåæ ‡ç³»åŸç‚¹åœ¨å·¦ä¸‹è§’ï¼ŒXè½´æ­£æ–¹å‘æ˜¯å‘å³ï¼ŒYè½´æ­£æ–¹å‘æ˜¯å‘ä¸Šï¼Œæ‰€ä»¥Yè½´éœ€è¦è¿›è¡Œå˜æ¢
         switch (entity.type)
         {
         case kLine:
             lsLine l = entity.data.line;
+            l.s.y = canvas->h - l.s.y;
+            l.e.y = canvas->h - l.e.y;
             line(l.s.x, l.s.y, l.e.x, l.e.y);
             break;
 
         case kCircle:
             lsCircle cir = entity.data.circle;
+            cir.c.y = canvas->h - cir.c.y;
             circle((int)cir.c.x, (int)cir.c.y, (int)cir.r);
             break;
         
@@ -112,7 +122,7 @@ void ls_canvas_redraw(lsCanvas *canvas)
 }
 
 /**
- * @brief »­²¼ÂÖÑ¯¡£ÔÚÕâÀïÏìÓ¦°´¼ü¡£
+ * @brief ç”»å¸ƒè½®è¯¢ã€‚åœ¨è¿™é‡Œå“åº”æŒ‰é”®ã€‚
  * 
  * @param canvas 
  */
@@ -136,7 +146,7 @@ void ls_canvas_polling(lsCanvas *canvas)
 }
 
 /**
- * @brief Ïú»Ù»­²¼
+ * @brief é”€æ¯ç”»å¸ƒ
  * 
  * @param canvas 
  */

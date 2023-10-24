@@ -5,7 +5,7 @@
 
 typedef struct _lsBoundbox
 {
-    _lsBoundbox() : left(0.0), top(0.0), right(0.0), bottom(0.0) {} // C++特性，初始化列表，在创建结构体变量时能够将成员变量初始化为0
+    _lsBoundbox() : left(0.0), top(0.0), right(0.0), bottom(0.0) {} // C++鐗规�э紝鍒濆鍖栧垪琛紝鍦ㄥ垱寤虹粨鏋勪綋鍙橀噺鏃惰兘澶熷皢鎴愬憳鍙橀噺鍒濆鍖栦负0
 
     lsReal left;
     lsReal top;
@@ -50,5 +50,7 @@ lsBoundbox ls_boundbox_combine(lsBoundbox *box1, lsBoundbox *box2);
 lsReal ls_boundbox_width(lsBoundbox *box);
 
 lsReal ls_boundbox_height(lsBoundbox *box);
+
+lsPoint ls_boundbox_center(lsBoundbox *box);
 
 #endif // LS_BOUNDBOX_H

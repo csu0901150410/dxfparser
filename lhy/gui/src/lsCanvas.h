@@ -13,9 +13,9 @@ typedef struct
     int w;
     int h;
 
-    bool bDirty;// »æÖÆ¹ıÒ»±é¾Í²»ĞèÒªÖØ¸´»æÖÆÁË
+    bool bDirty;// ç»˜åˆ¶è¿‡ä¸€éå°±ä¸éœ€è¦é‡å¤ç»˜åˆ¶äº†
 
-    std::vector<lsEntity> entitys;// ÊµÌåÈİÆ÷£¬ÕâÀïÊÇC++µÄÌØĞÔ£¬µ±³ÉÒ»¸öÊı×é¾ÍĞĞ
+    std::vector<lsEntity> entitys;// å®ä½“å®¹å™¨ï¼Œè¿™é‡Œæ˜¯C++çš„ç‰¹æ€§ï¼Œå½“æˆä¸€ä¸ªæ•°ç»„å°±è¡Œ
 } lsCanvas;
 
 void ls_canvas_init(lsCanvas *canvas, int w, int h);
