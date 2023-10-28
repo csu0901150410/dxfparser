@@ -1,5 +1,22 @@
 #include "lsBoundbox.h"
 
+lsBoundbox ls_boundbox_init()
+{
+    lsBoundbox box;
+    box.left = MAX_REAL;
+    box.right = MIN_REAL;
+    box.bottom = MAX_REAL;
+    box.top = MIN_REAL;
+    return box;
+}
+
+bool ls_boundbox_is_valid(lsBoundbox *box)
+{
+    if (box->left < box->right && box->bottom < box->top)
+        return true;
+    return false;
+}
+
 /**
  * @brief Create box from two point
  * 
@@ -76,7 +93,17 @@ lsReal ls_boundbox_height(lsBoundbox *box)
 lsPoint ls_boundbox_center(lsBoundbox *box)
 {
     lsPoint center;
-    center.x = box->left + ls_boundbox_width(box) / 2;
-    center.y = box->bottom + ls_boundbox_height(box) / 2;
+    center.x = (box->left + box->right) / 2;
+    center.y = (box->bottom + box->top) / 2;
     return center;
+}
+
+lsBoundbox ls_boundbox_scale(lsBoundbox *box, lsReal scalex, lsReal scaley)
+{
+    lsBoundbox ret;
+    ret.left = box->left * scalex;
+    ret.right = box->right * scalex;
+    ret.bottom = box->bottom * scaley;
+    ret.top = box->top * scaley;
+    return ret;
 }

@@ -137,6 +137,7 @@
     <ClCompile Include="src\entity\lsCircle.cpp" />
     <ClCompile Include="src\entity\lsEntity.cpp" />
     <ClCompile Include="src\entity\lsLine.cpp" />
+    <ClCompile Include="src\entity\lsPoint.cpp" />
     <ClCompile Include="src\lsCanvas.cpp" />
   </ItemGroup>
   <ItemGroup>

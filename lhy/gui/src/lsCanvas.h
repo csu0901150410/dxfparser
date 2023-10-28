@@ -1,4 +1,4 @@
-#ifndef LS_CANVAS_H
+﻿#ifndef LS_CANVAS_H
 #define LS_CANVAS_H
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -13,12 +13,30 @@ typedef struct
     int w;
     int h;
 
-    bool bDirty;// 绘制过一遍就不需要重复绘制了
+    bool bDirty;
 
-    std::vector<lsEntity> entitys;// 实体容器，这里是C++的特性，当成一个数组就行
+    lsReal scale;
+
+    bool bDrag;// 鼠标中键拖动状态
+    lsPoint dragStartPoint;// 拖动开始点
+    lsPoint dragVector;// 拖动平移向量
+
+    lsPoint translate;// 图形平移向量
+
+    std::vector<lsEntity> entitys;
 } lsCanvas;
 
+void ls_canvas_param_reset(lsCanvas *canvas);
+
 void ls_canvas_init(lsCanvas *canvas, int w, int h);
+
+lsBoundbox ls_canvas_get_boundbox(lsCanvas *canvas);
+
+lsReal ls_canvas_get_w(lsCanvas *canvas);
+
+lsReal ls_canvas_get_h(lsCanvas *canvas);
+
+lsPoint ls_canvas_get_center(lsCanvas *canvas);
 
 void ls_canvas_load_entity(lsCanvas *canvas, std::vector<lsEntity> *entitys);
 
@@ -31,5 +49,7 @@ void ls_canvas_redraw(lsCanvas *canvas);
 void ls_canvas_polling(lsCanvas *canvas);
 
 void ls_canvas_destroy(lsCanvas *canvas);
+
+void ls_canvas_load_entity_test(lsCanvas *canvas);
 
 #endif // LS_CANVAS_H

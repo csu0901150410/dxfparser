@@ -63,7 +63,26 @@ lsEntity ls_entity_convert_circle(lsCircle *circle);
  */
 lsBoundbox ls_entity_get_boundbox(lsEntity *entity);
 
+/**
+ * @brief Entity scale relative to Origin
+ * 
+ * @param entity 
+ * @param scalex 
+ * @param scaley 
+ * @return lsEntity 
+ */
 lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley);
+
+/**
+ * @brief Entity scale relative to \p center
+ * 
+ * @param entity 
+ * @param center 
+ * @param scalex 
+ * @param scaley 
+ * @return lsEntity 
+ */
+lsEntity ls_entity_center_scale(const lsEntity *entity, const lsPoint *center, lsReal scalex, lsReal scaley);
 
 lsEntity ls_entity_translate(const lsEntity *entity, const lsPoint *vector);
 

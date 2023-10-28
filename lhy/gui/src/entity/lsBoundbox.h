@@ -13,6 +13,10 @@ typedef struct _lsBoundbox
     lsReal bottom;
 } lsBoundbox;
 
+lsBoundbox ls_boundbox_init();
+
+bool ls_boundbox_is_valid(lsBoundbox *box);
+
 /**
  * @brief Create box from two point
  * 
@@ -52,5 +56,7 @@ lsReal ls_boundbox_width(lsBoundbox *box);
 lsReal ls_boundbox_height(lsBoundbox *box);
 
 lsPoint ls_boundbox_center(lsBoundbox *box);
+
+lsBoundbox ls_boundbox_scale(lsBoundbox *box, lsReal scalex, lsReal scaley);
 
 #endif // LS_BOUNDBOX_H

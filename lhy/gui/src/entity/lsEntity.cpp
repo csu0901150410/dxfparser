@@ -69,6 +69,14 @@ lsBoundbox ls_entity_get_boundbox(lsEntity *entity)
     return box;
 }
 
+/**
+ * @brief Entity scale relative to Origin
+ * 
+ * @param entity 
+ * @param scalex 
+ * @param scaley 
+ * @return lsEntity 
+ */
 lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
 {
     lsEntity ent;
@@ -90,6 +98,27 @@ lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
         break;
     }
 
+    return ent;
+}
+
+/**
+ * @brief Entity scale relative to \p center
+ * 
+ * @param entity 
+ * @param center 
+ * @param scalex 
+ * @param scaley 
+ * @return lsEntity 
+ */
+lsEntity ls_entity_center_scale(const lsEntity *entity, const lsPoint *center, lsReal scalex, lsReal scaley)
+{
+    lsPoint transToOrigin = *center;
+    ls_point_negative(&transToOrigin);
+
+    lsEntity ent = *entity;
+    ent = ls_entity_translate(&ent, &transToOrigin);// move to origin
+    ent = ls_entity_scale(&ent, scalex, scaley);// scale relative to origin
+    ent = ls_entity_translate(&ent, center);// back to center
     return ent;
 }
 

@@ -42,6 +42,9 @@
     <ClCompile Include="src\entity\lsEntity.cpp">
       <Filter>entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\lsPoint.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
