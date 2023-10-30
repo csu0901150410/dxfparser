@@ -26,4 +26,6 @@ lsPoint ls_point_sub(lsPoint *p1, lsPoint *p2);
 
 lsPoint ls_point_add(lsPoint *p1, lsPoint *p2);
 
+lsPoint ls_point_mirror(lsPoint *o, lsPoint *p);
+
 #endif // LS_POINT_H

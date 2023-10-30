@@ -12,13 +12,15 @@
 void ls_canvas_param_reset(lsCanvas *canvas)
 {
     canvas->bDirty = true;
-    canvas->scale = 0.8;// 由用户调节的缩放比，初始化时图形占据80%的窗口
-
-    canvas->translate = {0.0, 0.0};
+    canvas->viewRatio = 0.8;// 初始化时图形显示占据80%的窗口
 
     canvas->bDrag = false;
     canvas->dragStartPoint = {0.0, 0.0};
     canvas->dragVector = {0.0, 0.0};
+
+    canvas->viewCenter = ls_canvas_get_center(canvas);
+    canvas->zoomCenter = ls_canvas_get_center(canvas);
+    canvas->zoomFactor = 1.0;
 }
 
 /**
@@ -222,20 +224,32 @@ void ls_canvas_redraw(lsCanvas *canvas)
     lsReal wndw = ls_canvas_get_w(canvas), wndh = ls_canvas_get_h(canvas);
     lsReal scale = MAX(boxw / wndw, boxh / wndh);
     scale = 1 / scale;
-    scale = canvas->scale * scale;
+    scale = canvas->viewRatio * scale;
 
-    lsPoint wndCenter = ls_canvas_get_center(canvas);
-    lsPoint boxCenter = ls_boundbox_center(&box);
-    lsPoint transBoxToWnd = ls_point_sub(&wndCenter, &boxCenter);// 从包围盒中心平移到画布中心
-    lsPoint transplate = ls_point_add(&transBoxToWnd, &canvas->translate);// 叠加平移向量
+    // 图形包围盒中心和原点重合时的平移向量
+    lsPoint transBoxToOrigin = ls_boundbox_center(&box);
+    ls_point_negative(&transBoxToOrigin);
+
+    // 缩放中心平移到原点的向量
+    lsPoint transZoomCenterToOrigin = canvas->zoomCenter;
+    ls_point_negative(&transZoomCenterToOrigin);
 
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
         lsEntity entity = canvas->entitys[i];
-        entity = ls_entity_center_scale(&entity, &boxCenter, scale, scale);// 图形进行中心缩放
-        entity = ls_entity_translate(&entity, &transplate);// 叠加偏移
+
+        // 原始图形缩放并移动到显示中心点
+        entity = ls_entity_translate(&entity, &transBoxToOrigin);// 移到原点
+        entity = ls_entity_scale(&entity, scale, scale);// 缩放
+        entity = ls_entity_translate(&entity, &canvas->viewCenter);// 移到显示中心点
+
+        // 应用光标缩放
+        entity = ls_entity_translate(&entity, &transZoomCenterToOrigin);
+        entity = ls_entity_scale(&entity, canvas->zoomFactor, canvas->zoomFactor);
+        entity = ls_entity_translate(&entity, &canvas->zoomCenter);
 
         ls_canvas_draw_entity(canvas, &entity);
+
         if (canvas->bDrag)
         {
             setlinecolor(RED);
@@ -267,25 +281,12 @@ void ls_canvas_polling(lsCanvas *canvas)
 
     while (1)
     {
-        ls_canvas_flush(canvas);
         ls_canvas_redraw(canvas);
+        ls_canvas_flush(canvas);
 
         msg = getmessage(EX_MOUSE | EX_KEY);
         switch (msg.message)
         {
-        // // lhy test zoom in and out
-        // case WM_LBUTTONDOWN:
-        //     canvas->scale += 0.2;
-        //     canvas->bDirty = true;
-        //     break;
-
-        // case WM_RBUTTONDOWN:
-        //     canvas->scale -= 0.2;
-        //     if (canvas->scale < 0.2)
-        //         canvas->scale = 0.2;
-        //     canvas->bDirty = true;
-        //     break;
-
         case WM_MBUTTONDOWN:
             canvas->bDrag = true;
             canvas->dragStartPoint.x = msg.x;
@@ -297,7 +298,10 @@ void ls_canvas_polling(lsCanvas *canvas)
             canvas->bDrag = false;
             lsPoint dragEnd = {msg.x, msg.y};
             canvas->dragVector = ls_point_sub(&dragEnd, &canvas->dragStartPoint);
-            canvas->translate = ls_point_add(&canvas->translate, &canvas->dragVector);// 拖动向量叠加到平移向量
+            
+            // 更新图形显示中心
+            canvas->viewCenter = ls_point_add(&canvas->viewCenter, &canvas->dragVector);
+
             canvas->bDirty = true;
             break;
         }
@@ -316,14 +320,22 @@ void ls_canvas_polling(lsCanvas *canvas)
         case WM_MOUSEWHEEL:
             if (msg.wheel < 0)
             {
-                canvas->scale -= 0.2;
-                if (canvas->scale < 0.2)
-                    canvas->scale = 0.2;
+                canvas->zoomFactor -= 0.05;
+                if (canvas->zoomFactor < 0.2)
+                    canvas->zoomFactor = 0.2;
+
+                canvas->zoomCenter.x = msg.x;
+                canvas->zoomCenter.y = msg.y;
+
                 canvas->bDirty = true;
             }
             else
             {
-                canvas->scale += 0.2;
+                canvas->zoomFactor += 0.05;
+
+                canvas->zoomCenter.x = msg.x;
+                canvas->zoomCenter.y = msg.y;
+
                 canvas->bDirty = true;
             }
             break;

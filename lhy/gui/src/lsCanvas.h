@@ -13,15 +13,16 @@ typedef struct
     int w;
     int h;
 
-    bool bDirty;
+    bool bDirty;// 脏标记
+    lsReal viewRatio;// 初始可视区域占画布的比例
 
-    lsReal scale;
-
-    bool bDrag;// 鼠标中键拖动状态
+    bool bDrag;// 图形拖动标记
     lsPoint dragStartPoint;// 拖动开始点
     lsPoint dragVector;// 拖动平移向量
-
-    lsPoint translate;// 图形平移向量
+    
+    lsPoint viewCenter;// 图形显示的中心点
+    lsPoint zoomCenter;// 图形缩放的中心点
+    lsReal zoomFactor;// 缩放系数
 
     std::vector<lsEntity> entitys;
 } lsCanvas;

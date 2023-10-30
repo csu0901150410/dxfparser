@@ -1,4 +1,4 @@
-#include "lsEntity.h"
+﻿#include "lsEntity.h"
 
 /**
  * @brief Convert lsPoint to lsEntity
@@ -102,7 +102,7 @@ lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
 }
 
 /**
- * @brief Entity scale relative to \p center
+ * @brief 实体以 \p center 为不动点进行缩放。即放缩前后 \p center 是不动的。
  * 
  * @param entity 
  * @param center 
