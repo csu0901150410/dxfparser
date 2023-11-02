@@ -4,6 +4,8 @@
 #include "lsCanvas.h"
 #include "lsBoundbox.h"
 
+#include "lsArc.h"
+
 /**
  * @brief 画布参数重置
  * 
@@ -207,6 +209,14 @@ void ls_canvas_redraw(lsCanvas *canvas)
         return;
 
     cleardevice();
+
+    // lhy test draw arc
+    lsPoint ps = {100, 200};
+    lsPoint pa = {150, 185};
+    lsPoint pe = {230, 240};
+    lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
+    ls_arc_draw(&circlearc);
+    line(ps.x, ps.y, pe.x, pe.y);
 
     // get the boundbox of all entitys
     lsBoundbox box = ls_boundbox_init();

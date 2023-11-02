@@ -133,20 +133,25 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\dxflib\lsDxf.cpp" />
+    <ClCompile Include="src\entity\lsArc.cpp" />
     <ClCompile Include="src\entity\lsBoundbox.cpp" />
     <ClCompile Include="src\entity\lsCircle.cpp" />
     <ClCompile Include="src\entity\lsEntity.cpp" />
     <ClCompile Include="src\entity\lsLine.cpp" />
     <ClCompile Include="src\entity\lsPoint.cpp" />
+    <ClCompile Include="src\entity\lsVector.cpp" />
     <ClCompile Include="src\lsCanvas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dxflib\lsDxf.h" />
+    <ClInclude Include="src\entity\lsArc.h" />
     <ClInclude Include="src\entity\lsBoundbox.h" />
     <ClInclude Include="src\entity\lsCircle.h" />
     <ClInclude Include="src\entity\lsEntity.h" />
+    <ClInclude Include="src\entity\lsGlobal.h" />
     <ClInclude Include="src\entity\lsLine.h" />
     <ClInclude Include="src\entity\lsPoint.h" />
+    <ClInclude Include="src\entity\lsVector.h" />
     <ClInclude Include="src\lsCanvas.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

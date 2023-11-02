@@ -1,17 +1,7 @@
 #ifndef LS_POINT_H
 #define LS_POINT_H
 
-#define _CRT_SECURE_NO_WARNINGS
-
-#include <float.h>
-
-typedef double lsReal;
-
-#define MAX_REAL    DBL_MAX
-#define MIN_REAL    DBL_MIN
-
-#define MIN(a, b) ((a) < (b)) ? (a) : (b)
-#define MAX(a, b) ((a) < (b)) ? (b) : (a)
+#include "lsVector.h"
 
 typedef struct
 {

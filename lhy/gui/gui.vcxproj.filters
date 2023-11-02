@@ -45,6 +45,12 @@
     <ClCompile Include="src\entity\lsPoint.cpp">
       <Filter>entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\lsVector.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsArc.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
@@ -66,6 +72,15 @@
       <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\lsEntity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsGlobal.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsVector.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsArc.h">
       <Filter>entity</Filter>
     </ClInclude>
   </ItemGroup>
