@@ -10,3 +10,14 @@ lhy/gui/x64/
 res/
 
 !lhy/res/
+
+
+# lwj文件夹下的规则，和lhy保持一致，仅lhy->lwj路径修改
+lwj/*.exe
+lwj/.vs/
+lwj/.vscode/
+lwj/x64/
+lwj/gui/x64/
+res/
+
+!lwj/res/
