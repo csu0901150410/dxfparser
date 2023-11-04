@@ -113,6 +113,12 @@ void ls_canvas_load_entity_test(lsCanvas *canvas)
     circle.c = {canvas->w / 2.0, canvas->h / 2.0};
     circle.r = MIN(circle.c.x, circle.c.y);
     ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
+
+    lsPoint ps = {100, 200};
+    lsPoint pa = {150, 185};
+    lsPoint pe = {230, 240};
+    lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
+    ls_canvas_add_entity(canvas, ls_entity_convert_arc(&circlearc));
 }
 
 /**
@@ -188,6 +194,15 @@ void ls_canvas_draw_entity(lsCanvas *canvas, lsEntity *entity)
         lsCircle cir = entity->data.circle;
         circle((int)cir.c.x, (int)cir.c.y, (int)cir.r);
         break;
+
+    case kArc:
+    {
+        lsArc circlearc = entity->data.arc;
+        lsBoundbox box = ls_arc_get_circle_boundbox(&circlearc);
+        arc(box.left, box.top, box.right, box.bottom, 
+            ls_arc_get_start_angle(&circlearc), ls_arc_get_end_angle(&circlearc));
+        break;
+    }
     
     default:
         break;
@@ -209,14 +224,6 @@ void ls_canvas_redraw(lsCanvas *canvas)
         return;
 
     cleardevice();
-
-    // lhy test draw arc
-    lsPoint ps = {100, 200};
-    lsPoint pa = {150, 185};
-    lsPoint pe = {230, 240};
-    lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
-    ls_arc_draw(&circlearc);
-    line(ps.x, ps.y, pe.x, pe.y);
 
     // get the boundbox of all entitys
     lsBoundbox box = ls_boundbox_init();

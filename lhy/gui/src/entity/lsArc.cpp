@@ -1,4 +1,4 @@
-#include "lsArc.h"
+﻿#include "lsArc.h"
 
 /**
  * @brief 从三点构造圆弧
@@ -105,6 +105,36 @@ lsBoundbox ls_arc_get_circle_boundbox(lsArc *arc)
     lsPoint p1 = {c.x - r, c.y - r};
     lsPoint p2 = {c.x + r, c.y + r};
     return ls_bounbox_create(&p1, &p2);
+}
+
+lsArc ls_arc_translate(const lsArc *arc, const lsVector *vector)
+{
+    lsArc ret;
+    ret.s = ls_point_translate(&arc->s, vector);
+    ret.e = ls_point_translate(&arc->e, vector);
+    ret.c = ls_point_translate(&arc->c, vector);
+    ret.bccw = arc->bccw;
+    return ret;
+}
+
+lsArc ls_arc_scale(const lsArc *arc, lsReal scale)
+{
+    lsArc ret;
+    ret.s = ls_point_scale(&arc->s, scale);
+    ret.e = ls_point_scale(&arc->e, scale);
+    ret.c = ls_point_scale(&arc->c, scale);
+    ret.bccw = arc->bccw;
+    return ret;
+}
+
+lsArc ls_arc_scale_ref(const lsArc * arc, const lsPoint *c, lsReal scale)
+{
+    lsArc ret;
+    ret.s = ls_point_scale_ref(&arc->s, c, scale);
+    ret.e = ls_point_scale_ref(&arc->e, c, scale);
+    ret.c = ls_point_scale_ref(&arc->c, c, scale);
+    ret.bccw = arc->bccw;
+    return ret;
 }
 
 // lhy test

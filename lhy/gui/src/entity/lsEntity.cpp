@@ -43,6 +43,20 @@ lsEntity ls_entity_convert_circle(lsCircle *circle)
 }
 
 /**
+ * @brief Convert lsArc to lsEntity
+ * 
+ * @param arc pointer to arc
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_arc(lsArc *arc)
+{
+    lsEntity entity;
+    entity.type = kArc;
+    entity.data.arc = *arc;
+    return entity;
+}
+
+/**
  * @brief Get the boundbox of the entity
  * 
  * @param entity 
@@ -60,6 +74,10 @@ lsBoundbox ls_entity_get_boundbox(lsEntity *entity)
 
     case kCircle:
         box = ls_circle_get_boundbox(&entity->data.circle);
+        break;
+
+    case kArc:
+        box = ls_arc_get_circle_boundbox(&entity->data.arc);
         break;
 
     default:
@@ -91,6 +109,11 @@ lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
     case kCircle:
         ent.data.circle = ls_circle_scale(&entity->data.circle, scalex);
         ent = ls_entity_convert_circle(&ent.data.circle);
+        break;
+
+    case kArc:
+        ent.data.arc = ls_arc_scale(&entity->data.arc, scalex);
+        ent = ls_entity_convert_arc(&ent.data.arc);
         break;
 
     default:
@@ -137,6 +160,15 @@ lsEntity ls_entity_translate(const lsEntity *entity, const lsPoint *vector)
         ent.data.circle = ls_circle_translate(&entity->data.circle, vector);
         ent = ls_entity_convert_circle(&ent.data.circle);
         break;
+
+    case kArc:
+    {
+        // 这个接口和上边的不一样，后续要以这个为标准，即传入向量
+        lsVector v = {vector->x, vector->y};
+        ent.data.arc = ls_arc_translate(&entity->data.arc, &v);
+        ent = ls_entity_convert_arc(&ent.data.arc);
+        break;
+    }
 
     default:
         ent.type = kUnknown;

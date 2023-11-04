@@ -1,4 +1,4 @@
-#ifndef LS_VECTOR_H
+﻿#ifndef LS_VECTOR_H
 #define LS_VECTOR_H
 
 #include "lsGlobal.h"
