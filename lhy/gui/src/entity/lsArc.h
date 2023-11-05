@@ -1,4 +1,4 @@
-#ifndef LS_ARC_H
+﻿#ifndef LS_ARC_H
 #define LS_ARC_H
 
 #include "lsPoint.h"
@@ -64,8 +64,10 @@ lsReal ls_arc_get_end_angle(lsArc *arc);
  */
 lsBoundbox ls_arc_get_circle_boundbox(lsArc *arc);
 
-// lhy test
-#include "easyx.h"
-void ls_arc_draw(lsArc *circlearc);
+lsArc ls_arc_translate(const lsArc *arc, const lsVector *vector);
+
+lsArc ls_arc_scale(const lsArc *arc, lsReal scale);
+
+lsArc ls_arc_scale_ref(const lsArc * arc, const lsPoint *c, lsReal scale);
 
 #endif // LS_ARC_H

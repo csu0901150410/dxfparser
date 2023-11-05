@@ -7,6 +7,7 @@
 #include "lsLine.h"
 #include "lsCircle.h"
 #include "lsBoundbox.h"
+#include "lsArc.h"
 
 typedef enum
 {
@@ -23,6 +24,7 @@ typedef union
     lsPoint point;
     lsLine line;
     lsCircle circle;
+    lsArc arc;
 } EntityData;
 
 typedef struct
@@ -54,6 +56,14 @@ lsEntity ls_entity_convert_line(lsLine *line);
  * @return lsEntity 
  */
 lsEntity ls_entity_convert_circle(lsCircle *circle);
+
+/**
+ * @brief Convert lsArc to lsEntity
+ * 
+ * @param arc pointer to arc
+ * @return lsEntity 
+ */
+lsEntity ls_entity_convert_arc(lsArc *arc);
 
 /**
  * @brief Get the boundbox of the entity
