@@ -79,7 +79,7 @@ lsBoundbox ls_entity_get_boundbox(lsEntity* entity)
         break;
 
     case kArc:
-        box = ls_arc_get_boundbox(&entity->data.arc);
+        box = ls_arc_get_circle_boundbox(&entity->data.arc);
         break;
 
     default:

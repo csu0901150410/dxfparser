@@ -3,6 +3,7 @@
 
 #include "lsCanvas.h"
 #include "lsBoundbox.h"
+#include "lsArc.h"
 
 /**
  * @brief 画布参数重置
@@ -102,7 +103,7 @@ void ls_canvas_load_entity_test(lsCanvas* canvas)
     lsLine right = { tr, br };
     lsLine bottom = { br, bl };
 
-    /* ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
+     ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
      ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
      ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
      ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
@@ -110,15 +111,20 @@ void ls_canvas_load_entity_test(lsCanvas* canvas)
      lsCircle circle;
      circle.c = {canvas->w / 2.0, canvas->h / 2.0};
      circle.r = MIN(circle.c.x, circle.c.y);
-     ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));*/
+     ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
 
 
-    lsArc arc1;
-    arc1.lup = { canvas->w / 6.0,canvas->h / 3.0 };
-    arc1.rlow = { canvas->w / 3.0,canvas->h / 1.5 };
-    arc1.stangle = MIN(arc1.lup.x, arc1.lup.y);
-    arc1.endangle = MIN(arc1.rlow.x, arc1.lup.y);
-    ls_canvas_add_entity(canvas, ls_entity_convert_arc(&arc1));
+    //lsArc arc1;
+    //arc1.lup = { canvas->w / 6.0,canvas->h / 3.0 };
+    //arc1.rlow = { canvas->w / 3.0,canvas->h / 1.5 };
+    //arc1.stangle = MIN(arc1.lup.x, arc1.lup.y);
+    //arc1.endangle = MIN(arc1.rlow.x, arc1.lup.y);
+    //ls_canvas_add_entity(canvas, ls_entity_convert_arc(&arc1));
+     lsPoint s = { 100, 200 };
+     lsPoint e = { 230, 240};
+     lsLine arc_line = { s, e };
+     ls_canvas_add_entity(canvas, ls_entity_convert_line(&arc_line));
+
 
 }
 
@@ -145,10 +151,10 @@ void ls_canvas_load_entity(lsCanvas* canvas, std::vector<lsEntity>* entitys)
             break;
 
 
-        case kArc:
+        /*case kArc:
             ent.data.arc.lup.y = canvas->h - ent.data.arc.lup.y;
             ent.data.arc.rlow.y = canvas->h - ent.data.arc.rlow.y;
-            break;
+            break;*/
         }
 
         canvas->entitys.push_back(ent);
@@ -202,10 +208,10 @@ void ls_canvas_draw_entity(lsCanvas* canvas, lsEntity* entity)
         circle((int)cir.c.x, (int)cir.c.y, (int)cir.r);
         break;
 
-    case kArc:
+   /* case kArc:
         lsArc ar = entity->data.arc;
         arc((int)ar.lup.x, (int)ar.lup.y, (int)ar.rlow.x, (int)ar.rlow.y, (int)ar.stangle, (int)ar.endangle);
-        break;
+        break;*/
 
     default:
         break;
@@ -227,6 +233,15 @@ void ls_canvas_redraw(lsCanvas* canvas)
         return;
 
     cleardevice();
+
+    // lhy test draw arc
+    lsPoint ps = { 100, 200 };
+    lsPoint pa = { 150, 185 };
+    lsPoint pe = { 230, 240 };
+    lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
+    //ls_arc_draw(&circlearc);
+    //line(ps.x, ps.y, pe.x, pe.y);
+
 
     // get the boundbox of all entitys
     lsBoundbox box = ls_boundbox_init();
@@ -253,6 +268,29 @@ void ls_canvas_redraw(lsCanvas* canvas)
     // 缩放中心平移到原点的向量
     lsPoint transZoomCenterToOrigin = canvas->zoomCenter;
     ls_point_negative(&transZoomCenterToOrigin);
+
+
+    // 圆弧图形缩放并移动到显示中心点
+    circlearc = ls_arc_translate(&circlearc, &transBoxToOrigin);// 移到原点
+    circlearc = ls_arc_scale(&circlearc, canvas->zoomFactor, canvas->zoomFactor);
+    circlearc = ls_arc_translate(&circlearc, &canvas->viewCenter);// 移到显示中心点
+
+    // 应用光标缩放
+    circlearc = ls_arc_translate(&circlearc, &transZoomCenterToOrigin);
+    circlearc = ls_arc_scale(&circlearc, canvas->zoomFactor, canvas->zoomFactor);
+    circlearc = ls_arc_translate(&circlearc, &canvas->zoomCenter);
+    ls_arc_draw(&circlearc);
+   
+
+    if (canvas->bDrag)
+    {
+        setlinecolor(RED);
+        setlinestyle(PS_DASHDOT);
+        circlearc = ls_arc_translate(&circlearc, &canvas->dragVector);// 叠加拖动偏移
+        ls_arc_draw(&circlearc);
+        setlinecolor(WHITE);
+        setlinestyle(PS_SOLID);
+    }
 
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
@@ -299,7 +337,7 @@ void ls_canvas_polling(lsCanvas* canvas)
     ExMessage msg;
     bool bExit = false;
 
-    BeginBatchDraw();
+    BeginBatchDraw();//防止闪屏
 
     while (1)
     {
@@ -320,7 +358,6 @@ void ls_canvas_polling(lsCanvas* canvas)
         {
             canvas->bDrag = false;
             lsPoint dragEnd = { msg.x, msg.y };
-            //canvas->dragVector = ls_point_sub(&dragEnd, &canvas->dragStartPoint);
 
             // 更新图形显示中心
             canvas->viewCenter = ls_point_add(&canvas->viewCenter, &canvas->dragVector);

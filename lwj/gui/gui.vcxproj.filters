@@ -48,6 +48,9 @@
     <ClCompile Include="src\entity\lsArc.cpp">
       <Filter>entity</Filter>
     </ClCompile>
+    <ClCompile Include="lsVector.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
@@ -73,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="src\entity\lsArc.h">
       <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsGlobal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsVector.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

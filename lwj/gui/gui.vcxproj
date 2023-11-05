@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lsVector.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\dxflib\lsDxf.cpp" />
     <ClCompile Include="src\entity\lsArc.cpp" />
@@ -147,8 +148,10 @@
     <ClInclude Include="src\entity\lsBoundbox.h" />
     <ClInclude Include="src\entity\lsCircle.h" />
     <ClInclude Include="src\entity\lsEntity.h" />
+    <ClInclude Include="src\entity\lsGlobal.h" />
     <ClInclude Include="src\entity\lsLine.h" />
     <ClInclude Include="src\entity\lsPoint.h" />
+    <ClInclude Include="src\entity\lsVector.h" />
     <ClInclude Include="src\lsCanvas.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
