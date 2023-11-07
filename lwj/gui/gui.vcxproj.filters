@@ -49,7 +49,7 @@
       <Filter>entity</Filter>
     </ClCompile>
     <ClCompile Include="lsVector.cpp">
-      <Filter>源文件</Filter>
+      <Filter>entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,10 +78,10 @@
       <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\lsGlobal.h">
-      <Filter>头文件</Filter>
+      <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\lsVector.h">
-      <Filter>头文件</Filter>
+      <Filter>entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -37,3 +37,47 @@ lsPoint ls_point_mirror(lsPoint *o, lsPoint *p)
     ret.y = 2 * o->y - p->y;
     return ret;
 }
+
+/**
+ * @brief 求点 \p p 关于向量v的转移
+ *
+ * @param v
+ * @param p
+ * @return lsPoint
+ */
+lsPoint ls_point_translate(const lsPoint* p, const lsVector* v)
+{
+    lsPoint ret;
+    ret.x = p->x + v->x;
+    ret.y = p->y + v->y;
+    return ret;
+}
+
+/**
+ * @brief 以原点为中心进行缩放
+ *
+ * @param scale
+ * @param p
+ * @return lsPoint
+ */
+lsPoint ls_point_scale(const lsPoint* p, lsReal scale)
+{
+    lsPoint ret;
+    ret.x = p->x * scale;
+    ret.y = p->y * scale;
+    return ret;
+}
+
+// 以指定点为中心进行缩放
+lsPoint ls_point_scale_ref(const lsPoint* p, const lsPoint* c, lsReal scale)
+{
+
+    // 计算向量cp，然后缩放向量，再移动到中心c
+    lsVector v = { c->x - p->x, c->y - p->y };
+    v = ls_vector_scale(&v, scale);
+
+    lsPoint ret;
+    ret.x = v.x + c->x;
+    ret.y = v.y + c->y;
+    return ret;
+}

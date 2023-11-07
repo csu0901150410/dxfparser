@@ -114,7 +114,7 @@ lsEntity ls_entity_scale(const lsEntity* entity, lsReal scalex, lsReal scaley)
         break;
 
     case kArc:
-        ent.data.arc = ls_arc_scale(&entity->data.arc, scalex, scaley);
+        ent.data.arc = ls_arc_scale(&entity->data.arc, scalex);
         ent = ls_entity_convert_arc(&ent.data.arc);
         break;
 
@@ -164,9 +164,13 @@ lsEntity ls_entity_translate(const lsEntity* entity, const lsPoint* vector)
         break;
 
     case kArc:
-        ent.data.arc = ls_arc_translate(&entity->data.arc, vector);
+    {
+        // 这个接口和上边的不一样，后续要以这个为标准，即传入向量
+        lsVector v = { vector->x, vector->y };
+        ent.data.arc = ls_arc_translate(&entity->data.arc, &v);
         ent = ls_entity_convert_arc(&ent.data.arc);
         break;
+    }
 
     default:
         ent.type = kUnknown;

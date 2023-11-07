@@ -1,36 +1,4 @@
 #include "lsArc.h"
-//
-//lsBoundbox ls_arc_get_boundbox(lsArc* arc)
-//{
-//	return ls_bounbox_create(&arc->lup, &arc->rlow);
-//}
-//
-//lsArc ls_arc_scale(const lsArc* arc, lsReal scalex, lsReal scaley)
-//{
-//	lsArc ar = *arc;
-//	//ar.stangle *= scale;
-//	//ar.endangle *= scale;
-//	ar.lup.x *= scalex;
-//	ar.rlow.y *= scaley;
-//	ar.lup.x *= scalex;
-//	ar.rlow.y *= scaley;
-//	return ar;
-//}
-//
-//lsArc ls_arc_translate(const lsArc* arc, const lsPoint* vector)
-//{
-//	lsArc ar;
-//	ar.lup.x = arc->lup.x + vector->x;
-//	ar.lup.y = arc->lup.y + vector->y;
-//	ar.rlow.x = arc->rlow.x + vector->x;
-//	ar.rlow.y = arc->rlow.y + vector->y;
-//	ar.stangle = arc->stangle;
-//	ar.endangle = arc->endangle;
-//	return ar;
-//}
-//
-
-
 
 /**
  * @brief 从三点构造圆弧
@@ -145,31 +113,41 @@ lsBoundbox ls_arc_get_circle_boundbox(lsArc* arc)
 * @param arc scale
 * @return lsReal
 */
-lsArc ls_arc_scale(const lsArc* arc, lsReal scalex,lsReal scaley)
+lsArc ls_arc_scale(const lsArc* arc, lsReal scale)
 {
-    lsArc ar = *arc;
-    ar.s.x *= scalex;
-    ar.s.y *= scaley;
-    ar.e.x *= scalex;
-    ar.e.y *= scaley;
-    ar.c.x *= scalex;
-    ar.c.y *= scaley;
-    ar.bccw = arc->bccw;
-    ar.valid = arc->valid;
-    return ar;
+    lsArc ret;
+    ret.s = ls_point_scale(&arc->s, scale);
+    ret.e = ls_point_scale(&arc->e, scale);
+    ret.c = ls_point_scale(&arc->c, scale);
+    ret.bccw = arc->bccw;
+    return ret;
 
 }
 
-lsArc ls_arc_translate(const lsArc* arc, const lsPoint* vector)
+lsArc ls_arc_translate(const lsArc* arc, const lsVector* vector)
 {
-    lsArc ar;
-    ar.s.x = arc->s.x + vector->x;
-    ar.s.y = arc->s.y + vector->y;
-    ar.e.x = arc->e.x + vector->x;
-    ar.e.y = arc->e.y + vector->y;
-    ar.c.x = arc->c.x + vector->x;
-    ar.c.y = arc->c.y + vector->y;
-    return ar;
+    lsArc ret;
+    ret.s = ls_point_translate(&arc->s, vector);
+    ret.e = ls_point_translate(&arc->e, vector);
+    ret.c = ls_point_translate(&arc->c, vector);
+    ret.bccw = arc->bccw;
+    return ret;
+}
+
+/**
+* @brief 以指定点为中心缩放圆弧
+*
+* @param arc scale
+* @return lsReal
+*/
+lsArc ls_arc_scale_ref(const lsArc* arc, const lsPoint* c, lsReal scale)
+{
+    lsArc ret;
+    ret.s = ls_point_scale_ref(&arc->s, c, scale);
+    ret.e = ls_point_scale_ref(&arc->e, c, scale);
+    ret.c = ls_point_scale_ref(&arc->c, c, scale);
+    ret.bccw = arc->bccw;
+    return ret;
 }
 
 

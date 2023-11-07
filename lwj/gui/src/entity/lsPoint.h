@@ -16,4 +16,9 @@ lsPoint ls_point_add(lsPoint *p1, lsPoint *p2);
 
 lsPoint ls_point_mirror(lsPoint *o, lsPoint *p);
 
+lsPoint ls_point_translate(const lsPoint* p, const lsVector* v);
+
+lsPoint ls_point_scale(const lsPoint* p, lsReal scale);
+
+lsPoint ls_point_scale_ref(const lsPoint* p, const lsPoint* c, lsReal scale);
 #endif // LS_POINT_H

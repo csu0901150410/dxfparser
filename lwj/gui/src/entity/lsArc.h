@@ -4,21 +4,6 @@
 #include "lsPoint.h"
 #include "lsBoundbox.h"
 
-//typedef struct
-//{
-//    lsPoint lup;
-//    lsPoint rlow;
-//    lsReal stangle;
-//    lsReal endangle;
-//}lsArc;
-//
-//lsBoundbox ls_arc_get_boundbox(lsArc* arc);
-//
-//lsArc ls_arc_scale(const lsArc* arc, lsReal scalex, lsReal scaley);
-//
-//lsArc ls_arc_translate(const lsArc* arc, const lsPoint* vector);
-
-
 typedef struct
 {
     lsPoint s;
@@ -79,18 +64,10 @@ lsReal ls_arc_get_end_angle(lsArc* arc);
  */
 lsBoundbox ls_arc_get_circle_boundbox(lsArc* arc);
 
-/**
-* @brief Ô²»¡µÄËõ·Å
-* 
-* @param arc scale
-* @return lsReal
-*/
-lsArc ls_arc_scale(const lsArc* arc, lsReal scalex,lsReal scaley);
+lsArc ls_arc_translate(const lsArc* arc, const lsVector* vector);
 
-lsArc ls_arc_translate(const lsArc* arc, const lsPoint* vector);
+lsArc ls_arc_scale(const lsArc* arc, lsReal scale);
 
-// lhy test
-#include "easyx.h"
-void ls_arc_draw(lsArc* circlearc);
+lsArc ls_arc_scale_ref(const lsArc* arc, const lsPoint* c, lsReal scale);
 
 #endif // LS_ARC_H
