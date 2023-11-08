@@ -84,41 +84,46 @@ lsPoint ls_canvas_get_center(lsCanvas *canvas)
 // lhy test
 void ls_canvas_load_entity_test(lsCanvas *canvas)
 {
-    lsBoundbox box;
+    // lsBoundbox box;
 
-    lsReal wndw = ls_canvas_get_w(canvas);
-    lsReal wndh = ls_canvas_get_h(canvas);
+    // lsReal wndw = ls_canvas_get_w(canvas);
+    // lsReal wndh = ls_canvas_get_h(canvas);
 
-    box.left = wndw * (1 / 4.0);
-    box.right = wndw * (3 / 4.0);
-    box.bottom = wndh * (1 / 4.0);
-    box.top = wndh * (2 / 4.0);
+    // box.left = wndw * (1 / 4.0);
+    // box.right = wndw * (3 / 4.0);
+    // box.bottom = wndh * (1 / 4.0);
+    // box.top = wndh * (2 / 4.0);
 
-    lsPoint bl = {box.left, box.bottom};
-    lsPoint tl = {box.left, box.top};
-    lsPoint tr = {box.right, box.top};
-    lsPoint br = {box.right, box.bottom};
+    // lsPoint bl = {box.left, box.bottom};
+    // lsPoint tl = {box.left, box.top};
+    // lsPoint tr = {box.right, box.top};
+    // lsPoint br = {box.right, box.bottom};
 
-    lsLine left = {bl, tl};
-    lsLine top = {tl, tr};
-    lsLine right = {tr, br};
-    lsLine bottom = {br, bl};
+    // lsLine left = {bl, tl};
+    // lsLine top = {tl, tr};
+    // lsLine right = {tr, br};
+    // lsLine bottom = {br, bl};
 
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
+
+    // lsCircle circle;
+    // circle.c = {canvas->w / 2.0, canvas->h / 2.0};
+    // circle.r = MIN(circle.c.x, circle.c.y);
+    // ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
+
+    // lsPoint ps = {100, 200};
+    // lsPoint pa = {150, 185};
+    // lsPoint pe = {230, 240};
+    // lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
+    // ls_canvas_add_entity(canvas, ls_entity_convert_arc(&circlearc));
 
     lsCircle circle;
-    circle.c = {canvas->w / 2.0, canvas->h / 2.0};
-    circle.r = MIN(circle.c.x, circle.c.y);
+    circle.c = {15783, 3365};
+    circle.r = 100;
     ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
-
-    lsPoint ps = {100, 200};
-    lsPoint pa = {150, 185};
-    lsPoint pe = {230, 240};
-    lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
-    ls_canvas_add_entity(canvas, ls_entity_convert_arc(&circlearc));
 }
 
 /**
@@ -225,6 +230,56 @@ void ls_canvas_redraw(lsCanvas *canvas)
 
     cleardevice();
 
+    /**
+     * @brief 说明
+     * 简单说一下几个概念。
+     * 
+     * 世界坐标系：这是最大的坐标系，我们的几何实体中的坐标就是世界坐标，理论上是无限大的，
+     * 几何实体就摆放在其中。
+     * 
+     * 画布坐标系/视口坐标系/窗口坐标系：这是我们观察世界坐标系上的几何实体的一个矩形窗口。
+     * 我们说透过这个窗口可以看见一部分的世界坐标系，实际上是说，将世界坐标系中可见的那部分
+     * 几何实体绘制到矩形窗口上。那么，我们就需要计算出这些几何实体的窗口坐标系坐标，这里
+     * 涉及世界坐标系到窗口坐标系的坐标转换。
+     * 
+     * 很自然的，有时候我们透过窗口看不到任何实体，要想看到实体，显然要移动窗口。注意，这
+     * 里说的是，窗口也能在世界坐标系下表示，或者说窗口坐标系的原点有一个对应的世界坐标系
+     * 坐标，当我们移动窗口时，其实是在移动这个原点。
+     * 
+     * 初始化的时候，认为窗口坐标系原点和世界坐标原点重合，X轴正方向向右、Y轴正方向向下，
+     * 我们设定世界坐标系也是这样（实际上，我们常用的世界坐标系Y轴是向上的）。
+     * 
+     */
+
+    // // 计算图形缩放到窗口边界盒大小时的缩放比例。目的是在当前窗口能够完整预览所有图形
+    // lsReal boxw = ls_boundbox_width(&box), boxh = ls_boundbox_height(&box);
+    // lsReal wndw = ls_canvas_get_w(canvas), wndh = ls_canvas_get_h(canvas);
+    // lsReal scale = MAX(boxw / wndw, boxh / wndh);
+    // scale = 1 / scale;
+    // scale = canvas->viewRatio * scale;
+
+
+    // 方式一：窗口坐标系原点和世界坐标系原点重合，两个坐标系是等价的，所以几何实体的世界坐标
+    // 即是窗口坐标，直接使用世界坐标进行绘制，很显然，几何实体位于窗口之外，看不到。
+    setlinecolor(WHITE);
+    for (size_t i = 0; i < canvas->entitys.size(); ++i)
+    {
+        lsEntity entity = canvas->entitys[i];
+        ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    FlushBatchDraw();
+
+    // 方式二：求解几何实体的包围盒，将窗口坐标系原点移动到包围盒中心。这时候，几何实体的世界
+    // 坐标就要转换成窗口坐标才能在窗口上绘制了（在窗口绘制是用的坐标叫窗口坐标）。比如说，有
+    // 一个点的世界坐标是P(11, 11)，窗口在世界坐标系原点O时，这个P(11, 11)自然也是窗口坐
+    // 标，但是现在将窗口原点移动到W(10, 10)，那么这个点的窗口坐标将变成Q(1, 1)，这个变换
+    // 就是在世界坐标系下，P(11, 11) + WO(0-10, 0-10) = OQ(1-0, 1-0)，这是向量的角度
+    // 向量坐标表示是终点坐标减去起点坐标。
+    // 不难发现，世界坐标到窗口坐标的转换就是点的世界坐标减去窗口原点的世界坐标等于点的窗口坐标
+
+    setlinecolor(RED);
+
     // get the boundbox of all entitys
     lsBoundbox box = ls_boundbox_init();
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
@@ -232,54 +287,115 @@ void ls_canvas_redraw(lsCanvas *canvas)
         lsBoundbox subbox = ls_entity_get_boundbox(&canvas->entitys[i]);
         box = ls_boundbox_combine(&box, &subbox);
     }
-
     if (!ls_boundbox_is_valid(&box))
         return;
-
-    // 计算图形缩放到窗口边界盒大小时的缩放比例。目的是在当前窗口能够完整预览所有图形
-    lsReal boxw = ls_boundbox_width(&box), boxh = ls_boundbox_height(&box);
-    lsReal wndw = ls_canvas_get_w(canvas), wndh = ls_canvas_get_h(canvas);
-    lsReal scale = MAX(boxw / wndw, boxh / wndh);
-    scale = 1 / scale;
-    scale = canvas->viewRatio * scale;
-
-    // 图形包围盒中心和原点重合时的平移向量
-    lsPoint transBoxToOrigin = ls_boundbox_center(&box);
-    ls_point_negative(&transBoxToOrigin);
-
-    // 缩放中心平移到原点的向量
-    lsPoint transZoomCenterToOrigin = canvas->zoomCenter;
-    ls_point_negative(&transZoomCenterToOrigin);
-
+    // 包围盒的中心，也是移动之后的窗口坐标系原点的世界坐标
+    lsPoint boxCenter = ls_boundbox_center(&box);
+    ls_point_negative(&boxCenter);// 取反
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
         lsEntity entity = canvas->entitys[i];
-
-        // 原始图形缩放并移动到显示中心点
-        entity = ls_entity_translate(&entity, &transBoxToOrigin);// 移到原点
-        entity = ls_entity_scale(&entity, scale, scale);// 缩放
-        entity = ls_entity_translate(&entity, &canvas->viewCenter);// 移到显示中心点
-
-        // 应用光标缩放
-        entity = ls_entity_translate(&entity, &transZoomCenterToOrigin);
-        entity = ls_entity_scale(&entity, canvas->zoomFactor, canvas->zoomFactor);
-        entity = ls_entity_translate(&entity, &canvas->zoomCenter);
-
+        // 平移/坐标转换，二者是等效的描述。
+        // 平移说的是，以窗口为参考系保持不动，将几何实体平移到窗口内。概念是移动，但是实际上没有实体发生移动。
+        // 坐标转换说的是，以窗口原点为参考重新计算几何实体的坐标，这种描述更接近本质。或者说，这是坐标系的平移。
+        // 后续将更新使用transform变换接口。
+        entity = ls_entity_translate(&entity, &boxCenter);
         ls_canvas_draw_entity(canvas, &entity);
-
-        if (canvas->bDrag)
-        {
-            setlinecolor(RED);
-            setlinestyle(PS_DASHDOT);
-            entity = ls_entity_translate(&entity, &canvas->dragVector);// 叠加拖动偏移
-            ls_canvas_draw_entity(canvas, &entity);
-            setlinecolor(WHITE);
-            setlinestyle(PS_SOLID);
-        }
     }
+
+
+    // 方式三：将窗口坐标系原点移动到包围盒左下角。对比和方式二的效果。
+    setlinecolor(BLUE);
+    lsPoint bottomLeftCenter = ls_boundbox_min(&box);
+    ls_point_negative(&bottomLeftCenter);// 取反
+    for (size_t i = 0; i < canvas->entitys.size(); ++i)
+    {
+        lsEntity entity = canvas->entitys[i];
+        entity = ls_entity_translate(&entity, &bottomLeftCenter);
+        ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    // 先睡了，缩放后续再更新
 
     canvas->bDirty = false;
 }
+
+
+
+
+// // backup
+// void ls_canvas_redraw(lsCanvas *canvas)
+// {
+//     if (!canvas)
+//         return;
+//     if (!canvas->bDirty)
+//         return;
+//     if (canvas->entitys.empty())
+//         return;
+
+//     cleardevice();
+
+//     // get the boundbox of all entitys
+//     lsBoundbox box = ls_boundbox_init();
+//     for (size_t i = 0; i < canvas->entitys.size(); ++i)
+//     {
+//         lsBoundbox subbox = ls_entity_get_boundbox(&canvas->entitys[i]);
+//         box = ls_boundbox_combine(&box, &subbox);
+//     }
+
+//     if (!ls_boundbox_is_valid(&box))
+//         return;
+
+//     // 计算图形缩放到窗口边界盒大小时的缩放比例。目的是在当前窗口能够完整预览所有图形
+//     lsReal boxw = ls_boundbox_width(&box), boxh = ls_boundbox_height(&box);
+//     lsReal wndw = ls_canvas_get_w(canvas), wndh = ls_canvas_get_h(canvas);
+//     lsReal scale = MAX(boxw / wndw, boxh / wndh);
+//     scale = 1 / scale;
+//     scale = canvas->viewRatio * scale;
+
+//     // 图形包围盒中心和原点重合时的平移向量
+//     lsPoint transBoxToOrigin = ls_boundbox_center(&box);
+//     ls_point_negative(&transBoxToOrigin);
+
+//     // 缩放中心平移到原点的向量
+//     lsPoint transZoomCenterToOrigin = canvas->zoomCenter;
+//     ls_point_negative(&transZoomCenterToOrigin);
+
+//     for (size_t i = 0; i < canvas->entitys.size(); ++i)
+//     {
+//         lsEntity entity = canvas->entitys[i];
+
+//         // 原始图形缩放并移动到显示中心点
+//         entity = ls_entity_translate(&entity, &transBoxToOrigin);// 移到原点
+//         entity = ls_entity_scale(&entity, scale, scale);// 缩放
+//         entity = ls_entity_translate(&entity, &canvas->viewCenter);// 移到显示中心点
+
+//         if (canvas->bZoom)
+//         {
+//             // 应用光标缩放
+//             entity = ls_entity_translate(&entity, &transZoomCenterToOrigin);
+//             entity = ls_entity_scale(&entity, canvas->zoomFactor, canvas->zoomFactor);
+//             entity = ls_entity_translate(&entity, &canvas->zoomCenter);
+//         }
+
+//         ls_canvas_draw_entity(canvas, &entity);
+
+//         if (canvas->bDrag)
+//         {
+//             setlinecolor(RED);
+//             setlinestyle(PS_DASHDOT);
+//             entity = ls_entity_translate(&entity, &canvas->dragVector);// 叠加拖动偏移
+//             ls_canvas_draw_entity(canvas, &entity);
+//             setlinecolor(WHITE);
+//             setlinestyle(PS_SOLID);
+//         }
+//     }
+
+//     if (canvas->bZoom)
+//         canvas->bZoom = false;
+
+//     canvas->bDirty = false;
+// }
 
 /**
  * @brief Canvas polling, wait for user input
@@ -337,6 +453,9 @@ void ls_canvas_polling(lsCanvas *canvas)
         case WM_MOUSEWHEEL:
             if (msg.wheel < 0)
             {
+                if (canvas->zoomFactor == 0.2)
+                    continue;
+
                 canvas->zoomFactor -= 0.05;
                 if (canvas->zoomFactor < 0.2)
                     canvas->zoomFactor = 0.2;
@@ -344,15 +463,20 @@ void ls_canvas_polling(lsCanvas *canvas)
                 canvas->zoomCenter.x = msg.x;
                 canvas->zoomCenter.y = msg.y;
 
+                canvas->bZoom = true;
                 canvas->bDirty = true;
             }
             else
             {
+                if (canvas->zoomFactor > 10)
+                    continue;
+
                 canvas->zoomFactor += 0.05;
 
                 canvas->zoomCenter.x = msg.x;
                 canvas->zoomCenter.y = msg.y;
 
+                canvas->bZoom = true;
                 canvas->bDirty = true;
             }
             break;

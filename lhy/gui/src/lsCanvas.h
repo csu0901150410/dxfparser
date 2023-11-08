@@ -24,6 +24,8 @@ typedef struct
     lsPoint zoomCenter;// 图形缩放的中心点
     lsReal zoomFactor;// 缩放系数
 
+    bool bZoom;
+
     std::vector<lsEntity> entitys;
 } lsCanvas;
 
