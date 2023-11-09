@@ -315,7 +315,62 @@ void ls_canvas_redraw(lsCanvas *canvas)
         ls_canvas_draw_entity(canvas, &entity);
     }
 
-    // 先睡了，缩放后续再更新
+    /**
+     * @brief 缩放。
+     * 
+     * 说一下缩放。缩放可以用两点之间坐标距离来描述。给定一个点P，世界坐标为(0, 1)，
+     * 给定一个点Q，世界坐标为(0, 2)，那么PQ的世界坐标距离即是1，我们以此为基准描述
+     * 距离。假设有一个坐标系A原点和世界坐标系原点重合，但是P在A中的坐标为(0, 2)，
+     * Q在A中的坐标为(0, 4)，显然，坐标系A的坐标刻度是世界坐标系的一半，或者说，A
+     * 比世界坐标系更精细。注意，世界坐标中的点一定是不会变动的，变动的只是描述这些点
+     * 的坐标系。来看看坐标距离，PQ的基准距离即世界坐标系距离为1，A坐标系距离为2，就
+     * 坐标距离来说，两点距离变大了，这就是放大，准确说是坐标刻度缩小。举个例子，从米
+     * 的视角来观察，原子和原子之间的距离还是太小了（数值上，以米为单位，即刻度），但
+     * 是如果从纳米的视角来观察，这个数值就比较大了，刻度在缩小，坐标尺寸却在变大，这
+     * 就是放大。缩小反之。
+     * 
+     */
+
+    // 现在来写代码。上述描述中的两点距离，将其中一点定为原点，就能得到点的缩放公式。
+    // newP - newQ = factor * (oldP - oldQ); oldQ == newQ == Origin
+    // so, newP = factor * oldP = (factor * p.x, factor * p.y)
+    // 假设窗口坐标系相对于世界坐标系放大两倍。窗口原点还在世界原点，显然，毛都看不到
+    setlinecolor(GREEN);
+    for (size_t i = 0; i < canvas->entitys.size(); ++i)
+    {
+        lsEntity entity = canvas->entitys[i];
+        entity = ls_entity_scale(&entity, 2, 2);
+        ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    // 缩放完再将窗口原点移到上次的中心看看。显然，还是毛都看不到。
+    // 一个很形象的一维例子，O----A----B，A是实体位置，放大后的坐标距离如果照搬到
+    // 世界坐标而不考虑刻度，实体已经到了B位置，如果还是将窗口移到之前的包围盒中心A，
+    // 显然是看不到B的。正确的做法是，我们也要将旧的窗口位置A放大到B。
+    setlinecolor(CYAN);
+    for (size_t i = 0; i < canvas->entitys.size(); ++i)
+    {
+        lsEntity entity = canvas->entitys[i];
+        entity = ls_entity_scale(&entity, 2, 2);
+        entity = ls_entity_translate(&entity, &bottomLeftCenter);
+        ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    // 将窗口坐标原点平移向量OA也放大两倍到OB，再将将窗口移动到B。Ohhhhhhhhh, nb
+    // 注意，这里我对圆的缩放是叠加了半径缩放的，如果半径不缩放，黄色圆将会盖住蓝色。
+    setlinecolor(YELLOW);
+    bottomLeftCenter = ls_point_scale(&bottomLeftCenter, 2);
+    for (size_t i = 0; i < canvas->entitys.size(); ++i)
+    {
+        lsEntity entity = canvas->entitys[i];
+        entity = ls_entity_scale(&entity, 2, 2);
+        entity = ls_entity_translate(&entity, &bottomLeftCenter);
+        ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    // 先睡觉，后续更新从变换的角度看待panning&zooming，到这里，一定要掌握点在世界坐
+    // 标系中绝对位置不变，只是描述点的坐标系变化这个概念，后续变换都是基于此，即坐标系
+    // 的变换。
 
     canvas->bDirty = false;
 }
