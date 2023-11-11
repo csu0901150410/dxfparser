@@ -13,6 +13,9 @@ typedef struct
     int w;
     int h;
 
+    lsPoint origin;// 窗口坐标系原点的世界坐标
+    lsReal scale;// 缩放系数
+
     bool bDirty;// 脏标记
     lsReal viewRatio;// 初始可视区域占画布的比例
 

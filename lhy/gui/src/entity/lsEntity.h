@@ -96,4 +96,6 @@ lsEntity ls_entity_center_scale(const lsEntity *entity, const lsPoint *center, l
 
 lsEntity ls_entity_translate(const lsEntity *entity, const lsPoint *vector);
 
+lsEntity ls_entity_transform(const lsEntity *entity, const lsPoint *origin, lsReal scale);
+
 #endif // LS_ENTITY_H

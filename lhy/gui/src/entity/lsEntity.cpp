@@ -124,6 +124,32 @@ lsEntity ls_entity_scale(const lsEntity *entity, lsReal scalex, lsReal scaley)
     return ent;
 }
 
+// 变换接口。从世界坐标转换成窗口坐标
+lsEntity ls_entity_transform(const lsEntity *entity, const lsPoint *origin, lsReal scale)
+{
+    lsEntity ent = *entity;
+    lsPoint world, viewport;
+
+    switch (entity->type)
+    {
+    case kCircle:
+        world = ent.data.circle.c;// 世界坐标
+        viewport.x = (world.x - origin->x) * scale;// 世界坐标变换为窗口坐标，公式：P' = (P - Q) * factor
+        viewport.y = (world.y - origin->y) * scale;
+
+        // 将圆由世界坐标描述转为窗口坐标描述
+        ent.data.circle.c = viewport;
+        ent.data.circle.r *= scale;// 圆作为一个圆心和半径的参数图形，半径也是要变换的，应用缩放即可
+        break;
+
+    default:
+        ent.type = kUnknown;
+        break;
+    }
+
+    return ent;
+}
+
 /**
  * @brief 实体以 \p center 为不动点进行缩放。即放缩前后 \p center 是不动的。
  * 
