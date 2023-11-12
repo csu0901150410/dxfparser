@@ -1,25 +1,30 @@
 ﻿#include "lsPoint.h"
 
-void ls_point_negative(lsPoint *pt)
+/**
+ * @brief 点转向量
+ * 
+ * @param p 
+ * @return lsVector 
+ */
+lsVector ls_point_p2v(const lsPoint *p)
 {
-    pt->x = -pt->x;
-    pt->y = -pt->y;
-    pt->z = -pt->z;
-}
-
-lsPoint ls_point_sub(lsPoint *p1, lsPoint *p2)
-{
-    lsPoint ret;
-    ret.x = p1->x - p2->x;
-    ret.y = p1->y - p2->y;
+    lsVector ret;
+    ret.x = p->x;
+    ret.y = p->y;
     return ret;
 }
 
-lsPoint ls_point_add(lsPoint *p1, lsPoint *p2)
+/**
+ * @brief 向量转点
+ * 
+ * @param v 
+ * @return lsVector 
+ */
+lsPoint ls_point_v2p(const lsVector *v)
 {
     lsPoint ret;
-    ret.x = p1->x + p2->x;
-    ret.y = p1->y + p2->y;
+    ret.x = v->x;
+    ret.y = v->y;
     return ret;
 }
 
@@ -33,8 +38,8 @@ lsPoint ls_point_add(lsPoint *p1, lsPoint *p2)
 lsPoint ls_point_mirror(lsPoint *o, lsPoint *p)
 {
     lsPoint ret;
-    ret.x = 2 * o->x - p->x;
-    ret.y = 2 * o->y - p->y;
+    ret.x = 2.0 * o->x - p->x;
+    ret.y = 2.0 * o->y - p->y;
     return ret;
 }
 
@@ -65,5 +70,24 @@ lsPoint ls_point_scale_ref(const lsPoint *p, const lsPoint *c, lsReal scale)
     lsPoint ret;
     ret.x = v.x + c->x;
     ret.y = v.y + c->y;
+    return ret;
+}
+
+/**
+ * @brief 点的坐标系变换。将点的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ * 
+ * @param p 
+ * @param cs 
+ * @return lsPoint 坐标系 \p cs 下的点坐标
+ */
+lsPoint ls_point_transform(const lsPoint *p, const lsCoordSystem *cs)
+{
+    lsPoint ret;
+
+    lsVector vp = ls_point_p2v(p);
+    lsVector op = ls_vector_sub(&vp, &cs->origin);
+    op = ls_vector_scale(&op, cs->scale);
+
+    ret = ls_point_v2p(&op);
     return ret;
 }

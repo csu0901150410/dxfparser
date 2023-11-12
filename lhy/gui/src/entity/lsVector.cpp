@@ -172,3 +172,17 @@ lsReal ls_vector_rotate_angle(const lsVector *v1, const lsVector *v2, bool bccw)
         return angle;
     return 2 * PI - angle;
 }
+
+/**
+ * @brief 向量的坐标系变换。将向量的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ * 
+ * @param vector 
+ * @param cs 
+ * @return lsVector 
+ */
+// lsVector ls_vector_transform(const lsVector *vector, const lsCoordSystem *cs)
+// {
+//     lsVector ret;
+//     ret = ls_vector_scale(vector, cs->scale);// 对于向量来说，坐标系变换就是缩放
+//     return ret;
+// }

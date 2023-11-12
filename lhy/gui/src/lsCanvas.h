@@ -7,27 +7,26 @@
 #include <vector>
 
 #include "lsEntity.h"
+#include "lsCoordSystem.h"
 
 typedef struct
 {
     int w;
     int h;
 
-    lsPoint origin;// 窗口坐标系原点的世界坐标
-    lsReal scale;// 缩放系数
+    lsCoordSystem vcs;// Viewport Coordinate System
 
     bool bDirty;// 脏标记
-    lsReal viewRatio;// 初始可视区域占画布的比例
 
     bool bDrag;// 图形拖动标记
     lsPoint dragStartPoint;// 拖动开始点
     lsPoint dragVector;// 拖动平移向量
     
-    lsPoint viewCenter;// 图形显示的中心点
+    bool bZoom;
     lsPoint zoomCenter;// 图形缩放的中心点
     lsReal zoomFactor;// 缩放系数
 
-    bool bZoom;
+    bool bHome;
 
     std::vector<lsEntity> entitys;
 } lsCanvas;
@@ -49,6 +48,8 @@ void ls_canvas_load_entity(lsCanvas *canvas, std::vector<lsEntity> *entitys);
 void ls_canvas_add_entity(lsCanvas *canvas, lsEntity entity);
 
 void ls_canvas_flush(lsCanvas *canvas);
+
+lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem *cs, const lsPoint *screen, lsReal zoomLevel);
 
 void ls_canvas_redraw(lsCanvas *canvas);
 

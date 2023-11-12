@@ -109,4 +109,13 @@ lsReal ls_vector_include_angle(const lsVector *v1, const lsVector *v2);
  */
 lsReal ls_vector_rotate_angle(const lsVector *v1, const lsVector *v2, bool bccw);
 
+/**
+ * @brief 向量的坐标系变换。将向量的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ * 
+ * @param vector 
+ * @param cs 
+ * @return lsVector 
+ */
+// lsVector ls_vector_transform(const lsVector *vector, const lsCoordSystem *cs);
+
 #endif // LS_VECTOR_H
