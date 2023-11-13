@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lsCoordSystem.cpp" />
     <ClCompile Include="lsVector.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\dxflib\lsDxf.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="src\entity\lsArc.h" />
     <ClInclude Include="src\entity\lsBoundbox.h" />
     <ClInclude Include="src\entity\lsCircle.h" />
+    <ClInclude Include="src\entity\lsCoordSystem.h" />
     <ClInclude Include="src\entity\lsEntity.h" />
     <ClInclude Include="src\entity\lsGlobal.h" />
     <ClInclude Include="src\entity\lsLine.h" />

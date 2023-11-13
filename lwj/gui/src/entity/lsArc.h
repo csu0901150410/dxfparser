@@ -3,6 +3,7 @@
 
 #include "lsPoint.h"
 #include "lsBoundbox.h"
+#include "lsCoordSystem.h"
 
 typedef struct
 {
@@ -30,7 +31,7 @@ lsArc ls_arc_construct_from_ppp(lsPoint s, lsPoint a, lsPoint e);
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_radius(lsArc* arc);
+lsReal ls_arc_get_radius(const lsArc* arc);
 
 /**
  * @brief 获取圆弧弧度
@@ -38,7 +39,7 @@ lsReal ls_arc_get_radius(lsArc* arc);
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_radian(lsArc* arc);
+lsReal ls_arc_get_radian(const lsArc* arc);
 
 /**
  * @brief 获取圆弧起始弧度
@@ -46,7 +47,7 @@ lsReal ls_arc_get_radian(lsArc* arc);
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_start_angle(lsArc* arc);
+lsReal ls_arc_get_start_angle(const lsArc* arc);
 
 /**
  * @brief 获取圆弧终止弧度
@@ -54,7 +55,7 @@ lsReal ls_arc_get_start_angle(lsArc* arc);
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_end_angle(lsArc* arc);
+lsReal ls_arc_get_end_angle(const lsArc* arc);
 
 /**
  * @brief 获取圆弧所在圆包围盒
@@ -62,12 +63,14 @@ lsReal ls_arc_get_end_angle(lsArc* arc);
  * @param arc
  * @return lsBoundbox
  */
-lsBoundbox ls_arc_get_circle_boundbox(lsArc* arc);
+lsBoundbox ls_arc_get_circle_boundbox(const lsArc* arc);
 
 lsArc ls_arc_translate(const lsArc* arc, const lsVector* vector);
 
 lsArc ls_arc_scale(const lsArc* arc, lsReal scale);
 
 lsArc ls_arc_scale_ref(const lsArc* arc, const lsPoint* c, lsReal scale);
+
+lsArc ls_arc_transform(const lsArc* arc, const lsCoordSystem* cs);
 
 #endif // LS_ARC_H

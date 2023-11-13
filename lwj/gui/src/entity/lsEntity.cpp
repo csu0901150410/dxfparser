@@ -1,4 +1,5 @@
-﻿#include "lsEntity.h"
+﻿#include "vector"
+#include "lsEntity.h"
 
 /**
  * @brief Convert lsPoint to lsEntity
@@ -6,7 +7,7 @@
  * @param point pointer to point
  * @return lsEntity
  */
-lsEntity ls_entity_convert_point(lsPoint* point)
+lsEntity ls_entity_convert_point(const lsPoint* point)
 {
     lsEntity entity;
     entity.type = kPoint;
@@ -20,7 +21,7 @@ lsEntity ls_entity_convert_point(lsPoint* point)
  * @param line pointer to line
  * @return lsEntity
  */
-lsEntity ls_entity_convert_line(lsLine* line)
+lsEntity ls_entity_convert_line(const lsLine* line)
 {
     lsEntity entity;
     entity.type = kLine;
@@ -34,7 +35,7 @@ lsEntity ls_entity_convert_line(lsLine* line)
  * @param circle pointer to circle
  * @return lsEntity
  */
-lsEntity ls_entity_convert_circle(lsCircle* circle)
+lsEntity ls_entity_convert_circle(const lsCircle* circle)
 {
     lsEntity entity;
     entity.type = kCircle;
@@ -49,7 +50,7 @@ lsEntity ls_entity_convert_circle(lsCircle* circle)
  * @param arc pointer to arc
  * @return lsEntity
  */
-lsEntity ls_entity_convert_arc(lsArc* arc)
+lsEntity ls_entity_convert_arc(const lsArc* arc)
 {
     lsEntity entity;
     entity.type = kArc;
@@ -64,7 +65,7 @@ lsEntity ls_entity_convert_arc(lsArc* arc)
  * @param entity
  * @return lsBoundbox
  */
-lsBoundbox ls_entity_get_boundbox(lsEntity* entity)
+lsBoundbox ls_entity_get_boundbox(const lsEntity* entity)
 {
     lsBoundbox box;
 
@@ -89,6 +90,20 @@ lsBoundbox ls_entity_get_boundbox(lsEntity* entity)
     return box;
 }
 
+// 求一组实体的包围盒。属于C++函数重载还有引用的特性
+lsBoundbox ls_entity_get_boundbox(const std::vector<lsEntity>& entitys)
+{
+    lsBoundbox ret = ls_boundbox_init();
+    for (size_t i = 0; i < entitys.size(); ++i)
+    {
+        lsBoundbox box = ls_entity_get_boundbox(&entitys[i]);
+        ret = ls_boundbox_combine(&ret, &box);
+    }
+    return ret;
+}
+
+
+
 /**
  * @brief Entity scale relative to Origin
  *
@@ -97,24 +112,24 @@ lsBoundbox ls_entity_get_boundbox(lsEntity* entity)
  * @param scaley
  * @return lsEntity
  */
-lsEntity ls_entity_scale(const lsEntity* entity, lsReal scalex, lsReal scaley)
+lsEntity ls_entity_scale(const lsEntity* entity, lsReal scale)
 {
     lsEntity ent;
 
     switch (entity->type)
     {
     case kLine:
-        ent.data.line = ls_line_scale(&entity->data.line, scalex, scaley);
+        ent.data.line = ls_line_scale(&entity->data.line, scale);
         ent = ls_entity_convert_line(&ent.data.line);
         break;
 
     case kCircle:
-        ent.data.circle = ls_circle_scale(&entity->data.circle, scalex);
+        ent.data.circle = ls_circle_scale(&entity->data.circle, scale);
         ent = ls_entity_convert_circle(&ent.data.circle);
         break;
 
     case kArc:
-        ent.data.arc = ls_arc_scale(&entity->data.arc, scalex);
+        ent.data.arc = ls_arc_scale(&entity->data.arc, scale);
         ent = ls_entity_convert_arc(&ent.data.arc);
         break;
 
@@ -126,28 +141,8 @@ lsEntity ls_entity_scale(const lsEntity* entity, lsReal scalex, lsReal scaley)
     return ent;
 }
 
-/**
- * @brief 实体以 \p center 为不动点进行缩放。即放缩前后 \p center 是不动的。
- *
- * @param entity
- * @param center
- * @param scalex
- * @param scaley
- * @return lsEntity
- */
-lsEntity ls_entity_center_scale(const lsEntity* entity, const lsPoint* center, lsReal scalex, lsReal scaley)
-{
-    lsPoint transToOrigin = *center;
-    ls_point_negative(&transToOrigin);
 
-    lsEntity ent = *entity;
-    ent = ls_entity_translate(&ent, &transToOrigin);// move to origin
-    ent = ls_entity_scale(&ent, scalex, scaley);// scale relative to origin
-    ent = ls_entity_translate(&ent, center);// back to center
-    return ent;
-}
-
-lsEntity ls_entity_translate(const lsEntity* entity, const lsPoint* vector)
+lsEntity ls_entity_translate(const lsEntity* entity, const lsVector* vector)
 {
     lsEntity ent;
 
@@ -163,19 +158,55 @@ lsEntity ls_entity_translate(const lsEntity* entity, const lsPoint* vector)
         ent = ls_entity_convert_circle(&ent.data.circle);
         break;
 
-    case kArc:
-    {
-        // 这个接口和上边的不一样，后续要以这个为标准，即传入向量
-        lsVector v = { vector->x, vector->y };
-        ent.data.arc = ls_arc_translate(&entity->data.arc, &v);
-        ent = ls_entity_convert_arc(&ent.data.arc);
-        break;
-    }
-
     default:
         ent.type = kUnknown;
         break;
     }
 
+    return ent;
+}
+
+lsEntity ls_entity_scale_ref(const lsEntity* entity, const lsPoint* center, lsReal scale)
+{
+    lsVector transToCenter = ls_point_p2v(center);
+    lsVector transToOrigin = ls_vector_scale(&transToOrigin, -1.0);
+   
+    lsEntity ent = *entity;
+    ent = ls_entity_translate(&ent, &transToOrigin);// move to origin
+    return ent;
+}
+
+/**
+ * @brief 实体的坐标系变换。将实体的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ *
+ * @param entity
+ * @param cs
+ * @return lsEntity
+ */
+lsEntity ls_entity_transform(const lsEntity* entity, const lsCoordSystem* cs)
+{
+    lsEntity ent;
+
+    switch (entity->type)
+    {
+    case kLine:
+        ent.data.line = ls_line_transform(&entity->data.line, cs);
+        ent = ls_entity_convert_line(&ent.data.line);
+        break ;
+
+    case kCircle:
+        ent.data.circle = ls_circle_transform(&entity->data.circle, cs);
+        ent = ls_entity_convert_circle(&ent.data.circle);
+        break;
+
+    case kArc:
+        ent.data.arc = ls_arc_transform(&entity->data.arc, cs);
+        ent = ls_entity_convert_arc(&ent.data.arc);
+        break;
+
+    default:
+        ent.type = kUnknown;
+        break;
+    }
     return ent;
 }

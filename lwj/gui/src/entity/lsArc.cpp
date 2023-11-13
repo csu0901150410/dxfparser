@@ -47,7 +47,7 @@ lsArc ls_arc_construct_from_ppp(lsPoint s, lsPoint a, lsPoint e)
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_radius(lsArc* arc)
+lsReal ls_arc_get_radius(const lsArc* arc)
 {
     lsVector radial = { arc->s.x - arc->c.x, arc->s.y - arc->c.y };
     return ls_vector_length(&radial);
@@ -59,7 +59,7 @@ lsReal ls_arc_get_radius(lsArc* arc)
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_radian(lsArc* arc)
+lsReal ls_arc_get_radian(const lsArc* arc)
 {
     lsVector cs = { arc->s.x - arc->c.x, arc->s.y - arc->c.y };
     lsVector ce = { arc->e.x - arc->c.x, arc->e.y - arc->c.y };
@@ -72,7 +72,7 @@ lsReal ls_arc_get_radian(lsArc* arc)
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_start_angle(lsArc* arc)
+lsReal ls_arc_get_start_angle(const lsArc* arc)
 {
     lsVector cx = { 1, 0 };
     lsVector cs = { arc->s.x - arc->c.x, arc->s.y - arc->c.y };
@@ -85,7 +85,7 @@ lsReal ls_arc_get_start_angle(lsArc* arc)
  * @param arc
  * @return lsReal
  */
-lsReal ls_arc_get_end_angle(lsArc* arc)
+lsReal ls_arc_get_end_angle(const lsArc* arc)
 {
     lsVector cx = { 1, 0 };
     lsVector ce = { arc->e.x - arc->c.x, arc->e.y - arc->c.y };
@@ -98,30 +98,13 @@ lsReal ls_arc_get_end_angle(lsArc* arc)
  * @param arc
  * @return lsBoundbox
  */
-lsBoundbox ls_arc_get_circle_boundbox(lsArc* arc)
+lsBoundbox ls_arc_get_circle_boundbox(const lsArc* arc)
 {
     lsPoint c = arc->c;
     lsReal r = ls_arc_get_radius(arc);
     lsPoint p1 = { c.x - r, c.y - r };
     lsPoint p2 = { c.x + r, c.y + r };
-    return ls_bounbox_create(&p1, &p2);
-}
-
-/**
-* @brief 圆弧的缩放
-*
-* @param arc scale
-* @return lsReal
-*/
-lsArc ls_arc_scale(const lsArc* arc, lsReal scale)
-{
-    lsArc ret;
-    ret.s = ls_point_scale(&arc->s, scale);
-    ret.e = ls_point_scale(&arc->e, scale);
-    ret.c = ls_point_scale(&arc->c, scale);
-    ret.bccw = arc->bccw;
-    return ret;
-
+    return ls_boundbox_create(&p1, &p2);
 }
 
 lsArc ls_arc_translate(const lsArc* arc, const lsVector* vector)
@@ -134,12 +117,16 @@ lsArc ls_arc_translate(const lsArc* arc, const lsVector* vector)
     return ret;
 }
 
-/**
-* @brief 以指定点为中心缩放圆弧
-*
-* @param arc scale
-* @return lsReal
-*/
+lsArc ls_arc_scale(const lsArc* arc, lsReal scale)
+{
+    lsArc ret;
+    ret.s = ls_point_scale(&arc->s, scale);
+    ret.e = ls_point_scale(&arc->e, scale);
+    ret.c = ls_point_scale(&arc->c, scale);
+    ret.bccw = arc->bccw;
+    return ret;
+}
+
 lsArc ls_arc_scale_ref(const lsArc* arc, const lsPoint* c, lsReal scale)
 {
     lsArc ret;
@@ -150,20 +137,19 @@ lsArc ls_arc_scale_ref(const lsArc* arc, const lsPoint* c, lsReal scale)
     return ret;
 }
 
-
-// lhy test
-#include "easyx.h"
-void ls_arc_draw(lsArc* circlearc)
+/**
+ * @brief 圆弧的坐标系变换。将圆弧的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ *
+ * @param arc
+ * @param cs
+ * @return lsArc
+ */
+lsArc ls_arc_transform(const lsArc* arc, const lsCoordSystem* cs)
 {
-    lsBoundbox box = ls_arc_get_circle_boundbox(circlearc);
-    lsReal startAngle = ls_arc_get_start_angle(circlearc);
-    lsReal endAngle = ls_arc_get_end_angle(circlearc);
-
-    line(box.left, box.bottom, box.left, box.top);
-    line(box.left, box.top, box.right, box.top);
-    line(box.right, box.top, box.right, box.bottom);
-    line(box.right, box.bottom, box.left, box.bottom);
-    arc(box.left, box.top, box.right, box.bottom, startAngle, endAngle);
- 
+    lsArc ret;
+    ret.s = ls_point_transform(&arc->s, cs);
+    ret.e = ls_point_transform(&arc->e, cs);
+    ret.c = ls_point_transform(&arc->c, cs);
+    ret.bccw = arc->bccw;
+    return ret;
 }
-

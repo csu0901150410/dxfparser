@@ -1,27 +1,37 @@
 #include "lsLine.h"
 
-lsBoundbox ls_line_get_boundbox(lsLine *line)
+lsBoundbox ls_line_get_boundbox(const lsLine *line)
 {
-    return ls_bounbox_create(&line->s, &line->e);
+    return ls_boundbox_create(&line->s, &line->e);
 }
 
-lsLine ls_line_scale(const lsLine *line, lsReal scalex, lsReal scaley)
+lsLine ls_line_scale(const lsLine *line, lsReal scale)
 {
-    lsPoint s = line->s, e = line->e;
-    s.x = s.x * scalex;
-    s.y = s.y * scaley;
-    e.x = e.x * scalex;
-    e.y = e.y * scaley;
-    lsLine l = {s, e};
-    return l;
+    lsLine ret;
+    ret.s = ls_point_scale(&line->s, scale);
+    ret.e = ls_point_scale(&line->e, scale);
+    return ret;
 }
 
-lsLine ls_line_translate(const lsLine *line, const lsPoint *vector)
+lsLine ls_line_translate(const lsLine *line, const lsVector *vector)
 {
-    lsLine l;
-    l.s.x = line->s.x + vector->x;
-    l.s.y = line->s.y + vector->y;
-    l.e.x = line->e.x + vector->x;
-    l.e.y = line->e.y + vector->y;
-    return l;
+    lsLine ret;
+    ret.s = ls_point_translate(&line->s, vector);
+    ret.e = ls_point_translate(&line->e, vector);
+    return ret;
+}
+
+/**
+ * @brief 线段的坐标系变换。将线段的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ *
+ * @param line
+ * @param cs
+ * @return lsLine 坐标系 \p cs 下的线段坐标
+ */
+lsLine ls_line_transform(const lsLine* line, const lsCoordSystem* cs)
+{
+    lsLine ret;
+    ret.s = ls_point_transform(&line->s, cs);
+    ret.e = ls_point_transform(&line->e, cs);
+    return ret;
 }
