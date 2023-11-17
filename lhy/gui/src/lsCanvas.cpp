@@ -218,6 +218,7 @@ void ls_canvas_draw_entity(lsCanvas *canvas, lsEntity *entity)
 // 以下这两个函数意义上应该属于坐标系统的变换的，也就是lsCoordSystem.cpp中的，但是，
 // 我没有解决头文件循环包含的问题，所以暂时放在这里。
 
+// 之前这两个函数作用反了
 /**
  * @brief 求视口坐标系 \p cs 下点 \p screen 的世界坐标
  * 
@@ -225,12 +226,12 @@ void ls_canvas_draw_entity(lsCanvas *canvas, lsEntity *entity)
  * @param screen 
  * @return lsPoint 
  */
-lsPoint ls_cs_world2screen(const lsCoordSystem *cs, const lsPoint *screen)
+lsPoint ls_cs_screen2world(const lsCoordSystem *cs, const lsPoint *screen)
 {
     // world.x = (screen.x / scale) + origin
     lsPoint ret = *screen;
-    ret = ls_point_scale(&ret, 1.0 / cs->scale);
-    ret = ls_point_translate(&ret, &cs->origin);
+    ret = ls_point_scale(&ret, 1.0 / cs->scale);// 缩放回去，使得坐标刻度和世界坐标系一致
+    ret = ls_point_translate(&ret, &cs->origin);// 相对坐标加上原点偏移得到绝对世界坐标
     return ret;
 }
 
@@ -241,9 +242,9 @@ lsPoint ls_cs_world2screen(const lsCoordSystem *cs, const lsPoint *screen)
  * @param world 
  * @return lsPoint 
  */
-lsPoint ls_cs_screen2world(const lsCoordSystem *cs, const lsPoint *world)
+lsPoint ls_cs_world2screen(const lsCoordSystem *cs, const lsPoint *world)
 {
-    return ls_point_transform(world, cs);
+    return ls_point_transform(world, cs);// 这个函数的功能实际上就是从参考系变换到目标系
 }
 
 /**
@@ -256,15 +257,15 @@ lsPoint ls_cs_screen2world(const lsCoordSystem *cs, const lsPoint *world)
  */
 lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem *cs, const lsPoint *screen, lsReal zoomLevel)
 {
-    lsCoordSystem ret;
-    lsPoint pointBefore = ls_cs_screen2world(cs, screen);
-    ret.scale = zoomLevel;
-    lsPoint pointAfter = ls_cs_screen2world(cs, screen);
+    lsCoordSystem ret = *cs;// 之前应该用ret参与运算的，但是用成cs了，导致改变的origin是cs的
+    lsPoint pointBefore = ls_cs_screen2world(&ret, screen);// 缩放前光标点对应的世界坐标
+    ret.scale = zoomLevel;// 视口坐标系叠加缩放，视口坐标系原点不动只进行缩放
+    lsPoint pointAfter = ls_cs_screen2world(&ret, screen);// 缩放后screen这个坐标值的屏幕点对应到新的世界坐标点上了
 
     lsVector vectorBefore = ls_point_p2v(&pointBefore);
     lsVector vectorAfter = ls_point_p2v(&pointAfter);
-    lsVector worldTranslate = ls_vector_sub(&vectorBefore, &vectorAfter);
-    ret.origin = ls_vector_add(&cs->origin, &worldTranslate);
+    lsVector worldTranslate = ls_vector_sub(&vectorBefore, &vectorAfter);// 计算新旧两个世界坐标点的平移向量
+    ret.origin = ls_vector_add(&ret.origin, &worldTranslate);// 视口坐标系原点平移，使得缩放后screen这个坐标值的屏幕点对应到原本的世界坐标点上
 
     return ret;
 }
@@ -292,7 +293,8 @@ void ls_canvas_redraw(lsCanvas *canvas)
         // 按下HOME键，重置视口
         lsBoundbox box = ls_entity_get_boundbox(canvas->entitys);
         lsPoint boxCenter = ls_boundbox_center(&box);
-        canvas->vcs.origin = ls_point_p2v(&boxCenter);
+        lsPoint boxBottomLeft = ls_boundbox_min(&box);
+        canvas->vcs.origin = ls_point_p2v(&boxBottomLeft);
         canvas->vcs.scale = 1.0;
     }
 
