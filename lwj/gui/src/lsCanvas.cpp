@@ -334,28 +334,21 @@ void ls_canvas_redraw(lsCanvas* canvas)
     if (canvas->bZoom)
     {
         canvas->bZoom = false;
-        canvas->vcs = ls_canvas_zoom_around_point(&canvas->vcs, &canvas->zoomCenter, canvas->zoomFactor);
-       
+        canvas->vcs = ls_canvas_zoom_around_point(&canvas->vcs, &canvas->zoomCenter, canvas->zoomFactor);     
     }
-  
+
+    // 拖拽触发，计算拖拽后的视口再显示
     if (canvas->bDrag)
     {
         canvas->bDrag = false;
-        canvas->vcs = ls_canvas_translate_around_point(&canvas->vcs, &canvas->dragVector_V);
-     
+        canvas->vcs = ls_canvas_translate_around_point(&canvas->vcs, &canvas->dragVector_V);   
     }
   
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
-       
-
         lsEntity entity = canvas->entitys[i];
-      
         entity = ls_entity_transform(&entity, &canvas->vcs);
-      
         ls_canvas_draw_entity(canvas, &entity);
-        // 拖拽触发，计算拖拽后的视口再显示
-     
     }
 
     canvas->bDirty = false;
