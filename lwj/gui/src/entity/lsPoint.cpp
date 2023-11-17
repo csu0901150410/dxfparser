@@ -58,6 +58,14 @@ lsPoint ls_point_translate(const lsPoint* p, const lsVector* v)
     return ret;
 }
 
+//lsPoint ls_point_sub(const lsPoint* o, const lsPoint* p)
+//{
+//    lsPoint ret;
+//    ret.x = p->x - o->x;
+//    ret.y = p->y - o->y;
+//    return ret;
+//}
+
 /**
  * @brief 以原点为中心进行缩放
  *
