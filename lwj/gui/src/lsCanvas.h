@@ -20,8 +20,10 @@ typedef struct
 
     bool bDrag;// 图形拖动标记
     lsPoint dragStartPoint;// 拖动开始点
-    lsPoint dragVector;// 拖动平移向量
-    
+    lsPoint dragVector_P;// 拖动平移向量_点
+    lsPoint dragEndPoint;
+    lsVector dragVector_V;// 拖动平移向量_矢量
+
     bool bZoom;//缩放标记
     lsPoint zoomCenter;// 图形缩放的中心点
     lsReal zoomFactor;// 缩放系数
@@ -51,6 +53,8 @@ void ls_canvas_add_entity(lsCanvas *canvas, lsEntity entity);
 void ls_canvas_flush(lsCanvas *canvas);
 
 lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem* cs, const lsPoint* screen, lsReal zoomLevel);
+
+lsCoordSystem ls_canvas_translate_around_point(const lsCoordSystem* cs, const lsPoint* screenStart, const lsPoint* screenEnd);
 
 void ls_canvas_redraw(lsCanvas *canvas);
 
