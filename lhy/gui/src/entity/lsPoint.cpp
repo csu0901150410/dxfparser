@@ -85,8 +85,8 @@ lsPoint ls_point_transform(const lsPoint *p, const lsCoordSystem *cs)
     lsPoint ret;
 
     lsVector vp = ls_point_p2v(p);
-    lsVector op = ls_vector_sub(&vp, &cs->origin);
-    op = ls_vector_scale(&op, cs->scale);
+    lsVector op = ls_vector_sub(&vp, &cs->origin);// 向量op的世界坐标描述
+    op = ls_vector_scale(&op, cs->scale);// 向量叠加缩放变换到目标坐标系描述
 
     ret = ls_point_v2p(&op);
     return ret;
