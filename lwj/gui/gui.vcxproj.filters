@@ -48,10 +48,10 @@
     <ClCompile Include="src\entity\lsArc.cpp">
       <Filter>entity</Filter>
     </ClCompile>
-    <ClCompile Include="lsVector.cpp">
+    <ClCompile Include="src\entity\lsCoordSystem.cpp">
       <Filter>entity</Filter>
     </ClCompile>
-    <ClCompile Include="lsCoordSystem.cpp">
+    <ClCompile Include="src\entity\lsVector.cpp">
       <Filter>entity</Filter>
     </ClCompile>
   </ItemGroup>

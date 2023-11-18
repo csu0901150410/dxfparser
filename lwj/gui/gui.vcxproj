@@ -131,16 +131,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="lsCoordSystem.cpp" />
-    <ClCompile Include="lsVector.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\dxflib\lsDxf.cpp" />
     <ClCompile Include="src\entity\lsArc.cpp" />
     <ClCompile Include="src\entity\lsBoundbox.cpp" />
     <ClCompile Include="src\entity\lsCircle.cpp" />
+    <ClCompile Include="src\entity\lsCoordSystem.cpp" />
     <ClCompile Include="src\entity\lsEntity.cpp" />
     <ClCompile Include="src\entity\lsLine.cpp" />
     <ClCompile Include="src\entity\lsPoint.cpp" />
+    <ClCompile Include="src\entity\lsVector.cpp" />
     <ClCompile Include="src\lsCanvas.cpp" />
   </ItemGroup>
   <ItemGroup>

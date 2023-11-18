@@ -272,9 +272,11 @@ lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem* cs, const lsPoint
     ret.origin = ls_vector_add(&cs->origin, &worldTranslate);*/
 
     lsCoordSystem ret = *cs;// 将ret赋值成cs指针，局部变量坐标系ret变不改变整体cs变
-    lsPoint pointBefore = ls_cs_world2screen(&ret, screen);
+    // lsPoint pointBefore = ls_cs_world2screen(&ret, screen);
+    lsPoint pointBefore = ls_cs_screen2world(&ret, screen);
     ret.scale = zoomLevel;
-    lsPoint pointAfter = ls_cs_world2screen(&ret, screen);
+    // lsPoint pointAfter = ls_cs_world2screen(&ret, screen);
+    lsPoint pointAfter = ls_cs_screen2world(&ret, screen);// 搞错了，将screen从屏幕坐标转世界坐标才对
 
     lsVector vectorBefore = ls_point_p2v(&pointBefore);
     lsVector vectorAfter = ls_point_p2v(&pointAfter);
@@ -339,20 +341,37 @@ void ls_canvas_redraw(lsCanvas* canvas)
         canvas->vcs = ls_canvas_zoom_around_point(&canvas->vcs, &canvas->zoomCenter, canvas->zoomFactor);
     }
 
-    // 拖拽触发，计算拖拽后的视口再显示
-    if (canvas->bDrag)
-    {
-        canvas->bDrag = false;
-        canvas->vcs = ls_canvas_translate_around_point(&canvas->vcs, &canvas->dragVector_V);
-
-    }
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
         lsEntity entity = canvas->entitys[i];
         entity = ls_entity_transform(&entity, &canvas->vcs);
         ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    // 拖动虚线显示。显示完实线图形之后再判断是否处于拖动状态
+    if (canvas->bDrag)
+    {
+        // 不能清除标志，因为WM_MOUSEMOVE需要此标志判断中键按下且移动。如果清楚，下边>100的情况永远不会发生
+        // canvas->bDrag = false;
+
+        if (canvas->dragVector_V.x > 100)
+        {
+            int a = 100;// lhy test break point
+        }
+
+        // 计算拖动时的临时视口。相较于原视口，只有原点发生改变
+        lsCoordSystem newVCS = canvas->vcs;
+        newVCS.origin.x -= canvas->dragVector_V.x;// 看起来是拖动图形往右边走，实际图形不动，那就只能视口往左边走
+        newVCS.origin.y -= canvas->dragVector_V.y;// 所以这里用减法。可以尝试用加法是什么效果
         
-        
+        setlinestyle(PS_DASHDOT);
+        for (size_t i = 0; i < canvas->entitys.size(); ++i)
+        {
+            lsEntity entity = canvas->entitys[i];
+            entity = ls_entity_transform(&entity, &newVCS);// 用新的视口执行变换
+            ls_canvas_draw_entity(canvas, &entity);
+        }
+        setlinestyle(PS_SOLID);
     }
 
     canvas->bDirty = false;
@@ -381,6 +400,8 @@ void ls_canvas_polling(lsCanvas* canvas)
         msg = getmessage(EX_MOUSE | EX_KEY);
         switch (msg.message)
         {
+
+        // 鼠标中键按下，记录拖动开始点
         case WM_MBUTTONDOWN:
             canvas->bDrag = true;
             canvas->dragStartPoint.x = msg.x;
@@ -404,11 +425,20 @@ void ls_canvas_polling(lsCanvas* canvas)
 
         case WM_MOUSEMOVE:
         {
+            // 鼠标中键按下且移动，记录拖动结束点，同时记录拖动向量
             if (canvas->bDrag)
             {
                 canvas->bDirty = true;
                 canvas->dragEndPoint.x = msg.x;
                 canvas->dragEndPoint.y = msg.y;
+
+                // 拖动向量（屏幕坐标系）
+                canvas->dragVector_V.x = canvas->dragEndPoint.x - canvas->dragStartPoint.x;
+                canvas->dragVector_V.y = canvas->dragEndPoint.y - canvas->dragStartPoint.y;
+
+                // 除以缩放系数得到对应的世界坐标系拖动向量。可将此向量叠加在视口原点上完成拖动
+                canvas->dragVector_V.x /= canvas->vcs.scale;
+                canvas->dragVector_V.y /= canvas->vcs.scale;
             }
             break;
         }
