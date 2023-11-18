@@ -9,7 +9,7 @@
  * @param e 
  * @return lsArc 
  */
-lsArc ls_arc_construct_from_ppp(lsPoint s, lsPoint a, lsPoint e)
+lsArc ls_arc_construct_from_ppp(lsVector s, lsVector a, lsVector e)
 {
     lsArc ret;
 
@@ -49,7 +49,7 @@ lsArc ls_arc_construct_from_ppp(lsPoint s, lsPoint a, lsPoint e)
  */
 lsReal ls_arc_get_radius(const lsArc *arc)
 {
-    lsVector radial = {arc->s.x - arc->c.x, arc->s.y - arc->c.y};
+    lsVector radial = ls_vector_sub(&arc->s, &arc->c);
     return ls_vector_length(&radial);
 }
 
@@ -61,8 +61,8 @@ lsReal ls_arc_get_radius(const lsArc *arc)
  */
 lsReal ls_arc_get_radian(const lsArc *arc)
 {
-    lsVector cs = {arc->s.x - arc->c.x, arc->s.y - arc->c.y};
-    lsVector ce = {arc->e.x - arc->c.x, arc->e.y - arc->c.y};
+    lsVector cs = ls_vector_sub(&arc->s, &arc->c);
+    lsVector ce = ls_vector_sub(&arc->e, &arc->c);
     return ls_vector_rotate_angle(&cs, &ce, arc->bccw);
 }
 
@@ -75,7 +75,7 @@ lsReal ls_arc_get_radian(const lsArc *arc)
 lsReal ls_arc_get_start_angle(const lsArc *arc)
 {
     lsVector cx = {1, 0};
-    lsVector cs = {arc->s.x - arc->c.x, arc->s.y - arc->c.y};
+    lsVector cs = ls_vector_sub(&arc->s, &arc->c);
     return ls_vector_rotate_angle(&cx, &cs, arc->bccw);
 }
 
@@ -88,7 +88,7 @@ lsReal ls_arc_get_start_angle(const lsArc *arc)
 lsReal ls_arc_get_end_angle(const lsArc *arc)
 {
     lsVector cx = {1, 0};
-    lsVector ce = {arc->e.x - arc->c.x, arc->e.y - arc->c.y};
+    lsVector ce = ls_vector_sub(&arc->e, &arc->c);
     return ls_vector_rotate_angle(&cx, &ce, arc->bccw);
 }
 
@@ -100,19 +100,20 @@ lsReal ls_arc_get_end_angle(const lsArc *arc)
  */
 lsBoundbox ls_arc_get_circle_boundbox(const lsArc *arc)
 {
-    lsPoint c = arc->c;
     lsReal r = ls_arc_get_radius(arc);
-    lsPoint p1 = {c.x - r, c.y - r};
-    lsPoint p2 = {c.x + r, c.y + r};
-    return ls_boundbox_create(&p1, &p2);
+    lsVector v1 = {r, r};
+    lsVector v2 = {-r, -r};
+    lsVector c1 = ls_vector_translate(&arc->c, &v1);
+    lsVector c2 = ls_vector_translate(&arc->c, &v2);
+    return ls_boundbox_create(&c1, &c2);
 }
 
 lsArc ls_arc_translate(const lsArc *arc, const lsVector *vector)
 {
     lsArc ret;
-    ret.s = ls_point_translate(&arc->s, vector);
-    ret.e = ls_point_translate(&arc->e, vector);
-    ret.c = ls_point_translate(&arc->c, vector);
+    ret.s = ls_vector_translate(&arc->s, vector);
+    ret.e = ls_vector_translate(&arc->e, vector);
+    ret.c = ls_vector_translate(&arc->c, vector);
     ret.bccw = arc->bccw;
     return ret;
 }
@@ -120,19 +121,9 @@ lsArc ls_arc_translate(const lsArc *arc, const lsVector *vector)
 lsArc ls_arc_scale(const lsArc *arc, lsReal scale)
 {
     lsArc ret;
-    ret.s = ls_point_scale(&arc->s, scale);
-    ret.e = ls_point_scale(&arc->e, scale);
-    ret.c = ls_point_scale(&arc->c, scale);
-    ret.bccw = arc->bccw;
-    return ret;
-}
-
-lsArc ls_arc_scale_ref(const lsArc * arc, const lsPoint *c, lsReal scale)
-{
-    lsArc ret;
-    ret.s = ls_point_scale_ref(&arc->s, c, scale);
-    ret.e = ls_point_scale_ref(&arc->e, c, scale);
-    ret.c = ls_point_scale_ref(&arc->c, c, scale);
+    ret.s = ls_vector_scale(&arc->s, scale);
+    ret.e = ls_vector_scale(&arc->e, scale);
+    ret.c = ls_vector_scale(&arc->c, scale);
     ret.bccw = arc->bccw;
     return ret;
 }
@@ -147,9 +138,10 @@ lsArc ls_arc_scale_ref(const lsArc * arc, const lsPoint *c, lsReal scale)
 lsArc ls_arc_transform(const lsArc *arc, const lsCoordSystem *cs)
 {
     lsArc ret;
-    ret.s = ls_point_transform(&arc->s, cs);
-    ret.e = ls_point_transform(&arc->e, cs);
-    ret.c = ls_point_transform(&arc->c, cs);
+    lsVector translate = ls_vector_scale(&cs->origin, -1.0);
+    ret.s = ls_vector_transform(&arc->s, &translate, cs->scale);
+    ret.e = ls_vector_transform(&arc->e, &translate, cs->scale);
+    ret.c = ls_vector_transform(&arc->c, &translate, cs->scale);
     ret.bccw = arc->bccw;
     return ret;
 }

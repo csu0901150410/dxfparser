@@ -7,7 +7,12 @@ typedef struct
 {
     lsReal x;
     lsReal y;
+    lsReal z;
+    lsReal w;
+    bool invalid;
 } lsVector;
+
+static const lsVector invalidVector = {0, 0, 0, 0, true};
 
 /**
  * @brief 实数插值
@@ -91,6 +96,15 @@ lsVector ls_vector_normalize(const lsVector *v);
 lsVector ls_vector_scale(const lsVector *v, lsReal factor);
 
 /**
+ * @brief 向量平移
+ * 
+ * @param v 
+ * @param translate 
+ * @return lsVector 
+ */
+lsVector ls_vector_translate(const lsVector *v, const lsVector *translate);
+
+/**
  * @brief 向量夹角 [0, pi]
  * 
  * @param v1 
@@ -109,13 +123,12 @@ lsReal ls_vector_include_angle(const lsVector *v1, const lsVector *v2);
  */
 lsReal ls_vector_rotate_angle(const lsVector *v1, const lsVector *v2, bool bccw);
 
-/**
- * @brief 向量的坐标系变换。将向量的世界坐标转换到坐标系 \p cs 下的坐标表示。
- * 
- * @param vector 
- * @param cs 
- * @return lsVector 
- */
-// lsVector ls_vector_transform(const lsVector *vector, const lsCoordSystem *cs);
+lsVector ls_vector_get_min(const lsVector *v1, const lsVector *v2);
+
+lsVector ls_vector_get_max(const lsVector *v1, const lsVector *v2);
+
+bool ls_vector_is_valid(const lsVector *v);
+
+lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsReal scale);
 
 #endif // LS_VECTOR_H

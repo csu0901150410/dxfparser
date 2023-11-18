@@ -1,15 +1,14 @@
 ﻿#ifndef LS_ARC_H
 #define LS_ARC_H
 
-#include "lsPoint.h"
 #include "lsBoundbox.h"
 #include "lsCoordSystem.h"
 
 typedef struct
 {
-    lsPoint s;
-    lsPoint e;
-    lsPoint c;
+    lsVector s;
+    lsVector e;
+    lsVector c;
     bool bccw;
     bool valid;
 } lsArc;
@@ -23,7 +22,7 @@ typedef struct
  * @param e 
  * @return lsArc 
  */
-lsArc ls_arc_construct_from_ppp(lsPoint s, lsPoint a, lsPoint e);
+lsArc ls_arc_construct_from_ppp(lsVector s, lsVector a, lsVector e);
 
 /**
  * @brief 获取圆弧半径
@@ -68,8 +67,6 @@ lsBoundbox ls_arc_get_circle_boundbox(const lsArc *arc);
 lsArc ls_arc_translate(const lsArc *arc, const lsVector *vector);
 
 lsArc ls_arc_scale(const lsArc *arc, lsReal scale);
-
-lsArc ls_arc_scale_ref(const lsArc * arc, const lsPoint *c, lsReal scale);
 
 lsArc ls_arc_transform(const lsArc *arc, const lsCoordSystem *cs);
 

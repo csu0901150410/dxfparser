@@ -8,16 +8,16 @@ lsBoundbox ls_line_get_boundbox(const lsLine *line)
 lsLine ls_line_scale(const lsLine *line, lsReal scale)
 {
     lsLine ret;
-    ret.s = ls_point_scale(&line->s, scale);
-    ret.e = ls_point_scale(&line->e, scale);
+    ret.s = ls_vector_scale(&line->s, scale);
+    ret.e = ls_vector_scale(&line->e, scale);
     return ret;
 }
 
 lsLine ls_line_translate(const lsLine *line, const lsVector *vector)
 {
     lsLine ret;
-    ret.s = ls_point_translate(&line->s, vector);
-    ret.e = ls_point_translate(&line->e, vector);
+    ret.s = ls_vector_translate(&line->s, vector);
+    ret.e = ls_vector_translate(&line->e, vector);
     return ret;
 }
 
@@ -31,7 +31,8 @@ lsLine ls_line_translate(const lsLine *line, const lsVector *vector)
 lsLine ls_line_transform(const lsLine *line, const lsCoordSystem *cs)
 {
     lsLine ret;
-    ret.s = ls_point_transform(&line->s, cs);
-    ret.e = ls_point_transform(&line->e, cs);
+    lsVector translate = ls_vector_scale(&cs->origin, -1.0);
+    ret.s = ls_vector_transform(&line->s, &translate, cs->scale);
+    ret.e = ls_vector_transform(&line->e, &translate, cs->scale);
     return ret;
 }

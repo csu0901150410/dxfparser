@@ -15,9 +15,7 @@ void ls_canvas_param_reset(lsCanvas *canvas)
 {
     canvas->bDirty = true;
 
-    canvas->bDrag = false;
-    canvas->dragStartPoint = {0.0, 0.0};
-    canvas->dragVector = {0.0, 0.0};
+    canvas->bPan = false;
 
     canvas->bZoom = false;
     canvas->zoomCenter = ls_canvas_get_center(canvas);
@@ -52,7 +50,7 @@ void ls_canvas_init(lsCanvas *canvas, int w, int h)
  */
 lsBoundbox ls_canvas_get_boundbox(lsCanvas *canvas)
 {
-    lsPoint tl = {0, 0}, br = {canvas->w - 1, canvas->h - 1};
+    lsVector tl = {0, 0}, br = {canvas->w - 1, canvas->h - 1};
     return ls_boundbox_create(&tl, &br);
 }
 
@@ -72,11 +70,11 @@ lsReal ls_canvas_get_h(lsCanvas *canvas)
  * @brief 获取画布的中心坐标
  * 
  * @param canvas 
- * @return lsPoint 
+ * @return lsVector 
  */
-lsPoint ls_canvas_get_center(lsCanvas *canvas)
+lsVector ls_canvas_get_center(lsCanvas *canvas)
 {
-    lsPoint center;
+    lsVector center;
     center.x = ls_canvas_get_w(canvas) / 2.0;
     center.y = ls_canvas_get_h(canvas) / 2.0;
     return center;
@@ -205,7 +203,9 @@ void ls_canvas_draw_entity(lsCanvas *canvas, lsEntity *entity)
     {
         lsArc circlearc = entity->data.arc;
         lsBoundbox box = ls_arc_get_circle_boundbox(&circlearc);
-        arc(box.left, box.top, box.right, box.bottom, 
+        lsVector lb = ls_boundbox_get_min(&box);
+        lsVector rt = ls_boundbox_get_max(&box);
+        arc(lb.x, rt.y, rt.x, lb.y, 
             ls_arc_get_start_angle(&circlearc), ls_arc_get_end_angle(&circlearc));
         break;
     }
@@ -213,61 +213,6 @@ void ls_canvas_draw_entity(lsCanvas *canvas, lsEntity *entity)
     default:
         break;
     }
-}
-
-// 以下这两个函数意义上应该属于坐标系统的变换的，也就是lsCoordSystem.cpp中的，但是，
-// 我没有解决头文件循环包含的问题，所以暂时放在这里。
-
-// 之前这两个函数作用反了
-/**
- * @brief 求视口坐标系 \p cs 下点 \p screen 的世界坐标
- * 
- * @param cs 
- * @param screen 
- * @return lsPoint 
- */
-lsPoint ls_cs_screen2world(const lsCoordSystem *cs, const lsPoint *screen)
-{
-    // world.x = (screen.x / scale) + origin
-    lsPoint ret = *screen;
-    ret = ls_point_scale(&ret, 1.0 / cs->scale);// 缩放回去，使得坐标刻度和世界坐标系一致
-    ret = ls_point_translate(&ret, &cs->origin);// 相对坐标加上原点偏移得到绝对世界坐标
-    return ret;
-}
-
-/**
- * @brief 求世界坐标下点 \p world 在视口坐标系 \p cs 中的坐标
- * 
- * @param cs 
- * @param world 
- * @return lsPoint 
- */
-lsPoint ls_cs_world2screen(const lsCoordSystem *cs, const lsPoint *world)
-{
-    return ls_point_transform(world, cs);// 这个函数的功能实际上就是从参考系变换到目标系
-}
-
-/**
- * @brief 计算视口坐标系 \p cs 以视口中点 \p screen 为中心缩放到 \p zoomLevel 时的新的视口坐标系
- * 
- * @param cs 
- * @param screen 
- * @param zoomLevel 
- * @return lsCoordSystem 
- */
-lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem *cs, const lsPoint *screen, lsReal zoomLevel)
-{
-    lsCoordSystem ret = *cs;// 之前应该用ret参与运算的，但是用成cs了，导致改变的origin是cs的
-    lsPoint pointBefore = ls_cs_screen2world(&ret, screen);// 缩放前光标点对应的世界坐标
-    ret.scale = zoomLevel;// 视口坐标系叠加缩放，视口坐标系原点不动只进行缩放
-    lsPoint pointAfter = ls_cs_screen2world(&ret, screen);// 缩放后screen这个坐标值的屏幕点对应到新的世界坐标点上了
-
-    lsVector vectorBefore = ls_point_p2v(&pointBefore);
-    lsVector vectorAfter = ls_point_p2v(&pointAfter);
-    lsVector worldTranslate = ls_vector_sub(&vectorBefore, &vectorAfter);// 计算新旧两个世界坐标点的平移向量
-    ret.origin = ls_vector_add(&ret.origin, &worldTranslate);// 视口坐标系原点平移，使得缩放后screen这个坐标值的屏幕点对应到原本的世界坐标点上
-
-    return ret;
 }
 
 /**
@@ -292,9 +237,8 @@ void ls_canvas_redraw(lsCanvas *canvas)
 
         // 按下HOME键，重置视口
         lsBoundbox box = ls_entity_get_boundbox(canvas->entitys);
-        lsPoint boxCenter = ls_boundbox_center(&box);
-        lsPoint boxBottomLeft = ls_boundbox_min(&box);
-        canvas->vcs.origin = ls_point_p2v(&boxBottomLeft);
+        lsVector boxCenter = ls_boundbox_center(&box);
+        canvas->vcs.origin = ls_boundbox_get_min(&box);
         canvas->vcs.scale = 1.0;
     }
 
@@ -302,7 +246,7 @@ void ls_canvas_redraw(lsCanvas *canvas)
     if (canvas->bZoom)
     {
         canvas->bZoom = false;
-        canvas->vcs = ls_canvas_zoom_around_point(&canvas->vcs, &canvas->zoomCenter, canvas->zoomFactor);
+        canvas->vcs = ls_cs_zoom_around_center(&canvas->vcs, &canvas->zoomCenter, canvas->zoomFactor);
     }
 
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
@@ -310,6 +254,23 @@ void ls_canvas_redraw(lsCanvas *canvas)
         lsEntity entity = canvas->entitys[i];
         entity = ls_entity_transform(&entity, &canvas->vcs);
         ls_canvas_draw_entity(canvas, &entity);
+    }
+
+    if (canvas->bPan)
+    {
+        lsCoordSystem viewport = canvas->vcs;
+        viewport.origin = ls_vector_sub(&viewport.origin, &canvas->panOffset);
+
+        setlinecolor(RED);
+        setlinestyle(PS_DASH);
+        for (size_t i = 0; i < canvas->entitys.size(); ++i)
+        {
+            lsEntity entity = canvas->entitys[i];
+            entity = ls_entity_transform(&entity, &viewport);
+            ls_canvas_draw_entity(canvas, &entity);
+        }
+        setlinecolor(WHITE);
+        setlinestyle(PS_SOLID);
     }
 
     canvas->bDirty = false;
@@ -339,22 +300,30 @@ void ls_canvas_polling(lsCanvas *canvas)
         switch (msg.message)
         {
         case WM_MBUTTONDOWN:
-            canvas->bDrag = true;
-            canvas->dragStartPoint.x = msg.x;
-            canvas->dragStartPoint.y = msg.y;
+            canvas->bPan = true;
+            canvas->panStart.x = msg.x;
+            canvas->panStart.y = msg.y;
             break;
 
         case WM_MBUTTONUP:
         {
-            canvas->bDrag = false;
+            canvas->vcs.origin = ls_vector_sub(&canvas->vcs.origin, &canvas->panOffset);
+
+            canvas->bPan = false;
             canvas->bDirty = true;
             break;
         }
 
         case WM_MOUSEMOVE:
         {
-            if (canvas->bDrag)
+            if (canvas->bPan)
             {
+                lsVector panEnd;
+                panEnd.x = msg.x;
+                panEnd.y = msg.y;
+
+                lsVector offset = ls_vector_sub(&panEnd, &canvas->panStart);
+                canvas->panOffset = ls_vector_scale(&offset, 1.0 / canvas->vcs.scale);
                 canvas->bDirty = true;
             }
             break;

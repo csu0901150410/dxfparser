@@ -101,43 +101,6 @@ lsBoundbox ls_entity_get_boundbox(const std::vector<lsEntity> &entitys)
     return ret;
 }
 
-/**
- * @brief Entity scale relative to Origin
- * 
- * @param entity 
- * @param scalex 
- * @param scaley 
- * @return lsEntity 
- */
-lsEntity ls_entity_scale(const lsEntity *entity, lsReal scale)
-{
-    lsEntity ent;
-
-    switch (entity->type)
-    {
-    case kLine:
-        ent.data.line = ls_line_scale(&entity->data.line, scale);
-        ent = ls_entity_convert_line(&ent.data.line);
-        break;
-
-    case kCircle:
-        ent.data.circle = ls_circle_scale(&entity->data.circle, scale);
-        ent = ls_entity_convert_circle(&ent.data.circle);
-        break;
-
-    case kArc:
-        ent.data.arc = ls_arc_scale(&entity->data.arc, scale);
-        ent = ls_entity_convert_arc(&ent.data.arc);
-        break;
-
-    default:
-        ent.type = kUnknown;
-        break;
-    }
-
-    return ent;
-}
-
 lsEntity ls_entity_translate(const lsEntity *entity, const lsVector *vector)
 {
     lsEntity ent;
@@ -164,18 +127,6 @@ lsEntity ls_entity_translate(const lsEntity *entity, const lsVector *vector)
         break;
     }
 
-    return ent;
-}
-
-lsEntity ls_entity_scale_ref(const lsEntity *entity, const lsPoint *center, lsReal scale)
-{
-    lsVector transToCenter = ls_point_p2v(center);
-    lsVector transToOrigin = ls_vector_scale(&transToOrigin, -1.0);
-
-    lsEntity ent = *entity;
-    ent = ls_entity_translate(&ent, &transToOrigin);// move to origin
-    ent = ls_entity_scale(&ent, scale);// scale relative to origin
-    ent = ls_entity_translate(&ent, &transToCenter);// back to center
     return ent;
 }
 

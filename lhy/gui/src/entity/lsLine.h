@@ -3,14 +3,13 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "lsPoint.h"
 #include "lsBoundbox.h"
 #include "lsCoordSystem.h"
 
 typedef struct
 {
-    lsPoint s;
-    lsPoint e;
+    lsVector s;
+    lsVector e;
 } lsLine;
 
 lsBoundbox ls_line_get_boundbox(const lsLine *line);

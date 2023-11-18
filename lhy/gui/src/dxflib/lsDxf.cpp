@@ -59,8 +59,8 @@ bool ls_dxf_get_line(lsDxf *dxf)
 // read the entity::line form the dxf file
 bool ls_dxf_read_entity_line(lsDxf *dxf)
 {
-    lsPoint s = {0, 0, 0};
-    lsPoint e = {0, 0, 0};
+    lsVector s = {0, 0, 0};
+    lsVector e = {0, 0, 0};
 
     while (!feof(dxf->fp))
     {
@@ -135,7 +135,7 @@ bool ls_dxf_read_entity_line(lsDxf *dxf)
 bool ls_dxf_read_entity_circle(lsDxf *dxf)
 {
     lsReal radius = 0.0;
-    lsPoint center = {0.0, 0.0, 0.0};
+    lsVector center = {0.0, 0.0, 0.0};
 
     while (!feof(dxf->fp))
     {

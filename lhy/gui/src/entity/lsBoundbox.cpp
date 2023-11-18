@@ -3,108 +3,74 @@
 lsBoundbox ls_boundbox_init()
 {
     lsBoundbox box;
-    box.left = MAX_REAL;
-    box.right = MIN_REAL;
-    box.bottom = MAX_REAL;
-    box.top = MIN_REAL;
+    box.c1 = invalidVector;
+    box.c2 = invalidVector;
+    // box.c1.x = MAX_REAL;
+    // box.c1.y = MAX_REAL;
+    // box.c2.x = -MAX_REAL;
+    // box.c2.y = -MAX_REAL;
     return box;
 }
 
 bool ls_boundbox_is_valid(const lsBoundbox *box)
 {
-    if (box->left < box->right && box->bottom < box->top)
-        return true;
-    return false;
+    return (ls_vector_is_valid(&box->c1) && ls_vector_is_valid(&box->c2));
 }
 
-/**
- * @brief Create box from two point
- * 
- * @param p1 
- * @param p2 
- * @return lsBoundbox 
- */
-lsBoundbox ls_boundbox_create(const lsPoint *p1, const lsPoint *p2)
+lsBoundbox ls_boundbox_create(const lsVector *v1, const lsVector *v2)
 {
-    lsBoundbox box;
-
-    box.left = MIN(p1->x, p2->x);
-    box.right = MAX(p1->x, p2->x);
-    box.bottom = MIN(p1->y, p2->y);
-    box.top = MAX(p1->y, p2->y);
-    return box;
+    lsBoundbox ret;
+    ret.c1 = *v1;
+    ret.c2 = *v2;
+    return ret;
 }
 
-/**
- * @brief Get the box min point(left, bottom)
- * 
- * @param box 
- * @return lsPoint 
- */
-lsPoint ls_boundbox_min(const lsBoundbox *box)
+lsVector ls_boundbox_get_min(const lsBoundbox *box)
 {
-    lsPoint pt;
-    pt.x = box->left;
-    pt.y = box->bottom;
-    return pt;
+    return ls_vector_get_min(&box->c1, &box->c2);
 }
 
-/**
- * @brief Get the box max point(right, top)
- * 
- * @param box 
- * @return lsPoint 
- */
-lsPoint ls_boundbox_max(const lsBoundbox *box)
+lsVector ls_boundbox_get_max(const lsBoundbox *box)
 {
-    lsPoint pt;
-    pt.x = box->right;
-    pt.y = box->top;
-    return pt;
+    return ls_vector_get_max(&box->c1, &box->c2);
 }
 
-/**
- * @brief Combine two box to a box
- * 
- * @param box1 
- * @param box2 
- * @return lsBoundbox 
- */
 lsBoundbox ls_boundbox_combine(const lsBoundbox *box1, const lsBoundbox *box2)
 {
-    lsBoundbox box;
-    box.left = MIN(box1->left, box2->left);
-    box.right = MAX(box1->right, box2->right);
-    box.bottom = MIN(box1->bottom, box2->bottom);
-    box.top = MAX(box1->top, box2->top);
-    return box;
+    lsBoundbox ret;
+
+    lsVector min1 = ls_boundbox_get_min(box1);
+    lsVector max1 = ls_boundbox_get_max(box1);
+    lsVector min2 = ls_boundbox_get_min(box2);
+    lsVector max2 = ls_boundbox_get_max(box2);
+
+    ret.c1 = ls_vector_get_min(&min1, &min2);
+    ret.c2 = ls_vector_get_max(&max1, &max2);
+    return ret;
 }
 
 lsReal ls_boundbox_width(const lsBoundbox *box)
 {
-    return box->right - box->left;
+    return fabs(box->c1.x - box->c2.x);
 }
 
 lsReal ls_boundbox_height(const lsBoundbox *box)
 {
-    return box->top - box->bottom;
+    return fabs(box->c1.y - box->c2.y);
 }
 
-lsPoint ls_boundbox_center(const lsBoundbox *box)
+lsVector ls_boundbox_center(const lsBoundbox *box)
 {
-    lsPoint center;
-    center.x = (box->left + box->right) / 2;
-    center.y = (box->bottom + box->top) / 2;
-    return center;
+    lsVector ret = ls_vector_add(&box->c1, &box->c2);
+    ret = ls_vector_scale(&ret, 0.5);
+    return ret;
 }
 
-lsBoundbox ls_boundbox_scale(const lsBoundbox *box, lsReal scalex, lsReal scaley)
+lsBoundbox ls_boundbox_scale(const lsBoundbox *box, lsReal scale)
 {
     lsBoundbox ret;
-    ret.left = box->left * scalex;
-    ret.right = box->right * scalex;
-    ret.bottom = box->bottom * scaley;
-    ret.top = box->top * scaley;
+    ret.c1 = ls_vector_scale(&box->c1, scale);
+    ret.c2 = ls_vector_scale(&box->c2, scale);
     return ret;
 }
 
@@ -115,14 +81,20 @@ lsBoundbox ls_boundbox_scale(const lsBoundbox *box, lsReal scalex, lsReal scaley
  * @param cs 
  * @return lsBoundbox 
  */
-lsBoundbox ls_boundbox_transform(const lsBoundbox *boundbox, const lsCoordSystem *cs)
+lsBoundbox ls_boundbox_transform(const lsBoundbox *box, const lsCoordSystem *cs)
 {
     lsBoundbox ret;
-    lsPoint bl = ls_boundbox_min(boundbox);
-    lsPoint tr = ls_boundbox_max(boundbox);
-
-    bl = ls_point_transform(&bl, cs);
-    tr = ls_point_transform(&tr, cs);
-    ret = ls_boundbox_create(&bl, &tr);
+    ret.c1 = ls_vector_transform(&box->c1, &cs->origin, cs->scale);
+    ret.c2 = ls_vector_transform(&box->c2, &cs->origin, cs->scale);
     return ret;
+}
+
+lsVector ls_boundbox_get_corner1(const lsBoundbox *box)
+{
+    return box->c1;
+}
+
+lsVector ls_boundbox_get_corner2(const lsBoundbox *box)
+{
+    return box->c2;
 }

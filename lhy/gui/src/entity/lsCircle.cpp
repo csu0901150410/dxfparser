@@ -2,17 +2,17 @@
 
 lsBoundbox ls_circle_get_boundbox(const lsCircle *circle)
 {
-    lsPoint c = circle->c;
-    lsReal r = circle->r;
-    lsPoint p1 = {c.x - r, c.y - r};
-    lsPoint p2 = {c.x + r, c.y + r};
-    return ls_boundbox_create(&p1, &p2);
+    lsVector v1 = {circle->r, circle->r};
+    lsVector v2 = {-circle->r, -circle->r};
+    lsVector c1 = ls_vector_translate(&circle->c, &v1);
+    lsVector c2 = ls_vector_translate(&circle->c, &v2);
+    return ls_boundbox_create(&c1, &c2);
 }
 
 lsCircle ls_circle_scale(const lsCircle *circle, lsReal scale)
 {
     lsCircle ret;
-    ret.c = ls_point_scale(&circle->c, scale);
+    ret.c = ls_vector_scale(&circle->c, scale);
     ret.r = circle->r * scale;
     return ret;
 }
@@ -20,7 +20,7 @@ lsCircle ls_circle_scale(const lsCircle *circle, lsReal scale)
 lsCircle ls_circle_translate(const lsCircle *circle, const lsVector *vector)
 {
     lsCircle ret;
-    ret.c = ls_point_translate(&circle->c, vector);
+    ret.c = ls_vector_translate(&circle->c, vector);
     ret.r = circle->r;
     return ret;
 }
@@ -35,7 +35,8 @@ lsCircle ls_circle_translate(const lsCircle *circle, const lsVector *vector)
 lsCircle ls_circle_transform(const lsCircle *circle, const lsCoordSystem *cs)
 {
     lsCircle ret;
-    ret.c = ls_point_transform(&circle->c, cs);
+    lsVector translate = ls_vector_scale(&cs->origin, -1.0);
+    ret.c = ls_vector_transform(&circle->c, &translate, cs->scale);
     ret.r = circle->r * cs->scale;
     return ret;
 }

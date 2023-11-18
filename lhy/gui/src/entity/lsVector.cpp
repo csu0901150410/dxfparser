@@ -1,4 +1,4 @@
-#include <math.h>
+﻿#include <math.h>
 
 #include "lsVector.h"
 
@@ -40,6 +40,7 @@ lsVector ls_vector_add(const lsVector *v1, const lsVector *v2)
     lsVector ret;
     ret.x = v1->x + v2->x;
     ret.y = v1->y + v2->y;
+    ret.invalid = v1->invalid || v2->invalid;
     return ret;
 }
 
@@ -55,6 +56,7 @@ lsVector ls_vector_sub(const lsVector *v1, const lsVector *v2)
     lsVector ret;
     ret.x = v1->x - v2->x;
     ret.y = v1->y - v2->y;
+    ret.invalid = v1->invalid || v2->invalid;
     return ret;
 }
 
@@ -95,6 +97,7 @@ lsVector ls_vector_interp(const lsVector *v1, const lsVector *v2, lsReal t)
     lsVector ret;
     ret.x = _interp(v1->x, v2->x, t);
     ret.y = _interp(v1->y, v2->y, t);
+    ret.invalid = v1->invalid || v2->invalid;
     return ret;
 }
 
@@ -129,7 +132,20 @@ lsVector ls_vector_scale(const lsVector *v, lsReal factor)
     lsVector ret;
     ret.x = v->x * factor;
     ret.y = v->y * factor;
+    ret.invalid = v->invalid;
     return ret;
+}
+
+/**
+ * @brief 向量平移
+ * 
+ * @param v 
+ * @param translate 
+ * @return lsVector 
+ */
+lsVector ls_vector_translate(const lsVector *v, const lsVector *translate)
+{
+    return ls_vector_add(v, translate);
 }
 
 /**
@@ -173,16 +189,54 @@ lsReal ls_vector_rotate_angle(const lsVector *v1, const lsVector *v2, bool bccw)
     return 2 * PI - angle;
 }
 
+lsVector ls_vector_get_min(const lsVector *v1, const lsVector *v2)
+{
+    lsVector ret;
+    bool v1valid = ls_vector_is_valid(v1);
+    bool v2valid = ls_vector_is_valid(v2);
+    if (v1valid || v2valid)
+    {
+        // 至少有一个valid
+        ret.x = MIN(v1valid ? v1->x : MAX_REAL, v2valid ? v2->x : MAX_REAL);
+        ret.y = MIN(v1valid ? v1->y : MAX_REAL, v2valid ? v2->y : MAX_REAL);
+    }
+    ret.invalid = !v1valid && !v2valid;
+    return ret;
+}
+
+lsVector ls_vector_get_max(const lsVector *v1, const lsVector *v2)
+{
+    lsVector ret;
+    bool v1valid = ls_vector_is_valid(v1);
+    bool v2valid = ls_vector_is_valid(v2);
+    if (v1valid || v2valid)
+    {
+        // 至少有一个valid
+        ret.x = MAX(v1valid ? v1->x : -MAX_REAL, v2valid ? v2->x : -MAX_REAL);
+        ret.y = MAX(v1valid ? v1->y : -MAX_REAL, v2valid ? v2->y : -MAX_REAL);
+    }
+    ret.invalid = !v1valid && !v2valid;
+    return ret;
+}
+
+bool ls_vector_is_valid(const lsVector *v)
+{
+    return !v->invalid;
+}
+
 /**
- * @brief 向量的坐标系变换。将向量的世界坐标转换到坐标系 \p cs 下的坐标表示。
+ * @brief 向量变换。先平移再缩放
  * 
- * @param vector 
- * @param cs 
+ * @param v 
+ * @param translate 
+ * @param scale 
  * @return lsVector 
  */
-// lsVector ls_vector_transform(const lsVector *vector, const lsCoordSystem *cs)
-// {
-//     lsVector ret;
-//     ret = ls_vector_scale(vector, cs->scale);// 对于向量来说，坐标系变换就是缩放
-//     return ret;
-// }
+lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsReal scale)
+{
+    lsVector ret;
+    ret = ls_vector_add(v, translate);
+    ret = ls_vector_scale(&ret, scale);
+    ret.invalid = v->invalid || translate->invalid;
+    return ret;
+}

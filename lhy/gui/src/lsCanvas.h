@@ -18,12 +18,12 @@ typedef struct
 
     bool bDirty;// 脏标记
 
-    bool bDrag;// 图形拖动标记
-    lsPoint dragStartPoint;// 拖动开始点
-    lsPoint dragVector;// 拖动平移向量
+    bool bPan;// 图形拖动标记
+    lsVector panStart;// 拖动开始点
+    lsVector panOffset;
     
     bool bZoom;
-    lsPoint zoomCenter;// 图形缩放的中心点
+    lsVector zoomCenter;// 图形缩放的中心点----全部用向量表示，设计上lsPoint属于几何图元，在几何图元描述之外不应使用
     lsReal zoomFactor;// 缩放系数
 
     bool bHome;
@@ -41,15 +41,13 @@ lsReal ls_canvas_get_w(lsCanvas *canvas);
 
 lsReal ls_canvas_get_h(lsCanvas *canvas);
 
-lsPoint ls_canvas_get_center(lsCanvas *canvas);
+lsVector ls_canvas_get_center(lsCanvas *canvas);
 
 void ls_canvas_load_entity(lsCanvas *canvas, std::vector<lsEntity> *entitys);
 
 void ls_canvas_add_entity(lsCanvas *canvas, lsEntity entity);
 
 void ls_canvas_flush(lsCanvas *canvas);
-
-lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem *cs, const lsPoint *screen, lsReal zoomLevel);
 
 void ls_canvas_redraw(lsCanvas *canvas);
 

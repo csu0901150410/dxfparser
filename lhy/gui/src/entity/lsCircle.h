@@ -1,13 +1,12 @@
 #ifndef LS_CIRCLE_H
 #define LS_CIRCLE_H
 
-#include "lsPoint.h"
 #include "lsBoundbox.h"
 #include "lsCoordSystem.h"
 
 typedef struct
 {
-    lsPoint c;
+    lsVector c;
     lsReal r;
 } lsCircle;
 

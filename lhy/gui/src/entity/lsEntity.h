@@ -75,18 +75,7 @@ lsBoundbox ls_entity_get_boundbox(const lsEntity *entity);
 
 lsBoundbox ls_entity_get_boundbox(const std::vector<lsEntity> &entitys);
 
-/**
- * @brief Entity scale relative to Origin
- * 
- * @param entity 
- * @param scale 
- * @return lsEntity 
- */
-lsEntity ls_entity_scale(const lsEntity *entity, lsReal scale);
-
 lsEntity ls_entity_translate(const lsEntity *entity, const lsVector *vector);
-
-lsEntity ls_entity_scale_ref(const lsEntity *entity, const lsPoint *center, lsReal scale);
 
 lsEntity ls_entity_transform(const lsEntity *entity, const lsCoordSystem *cs);
 
