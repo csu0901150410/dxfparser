@@ -261,17 +261,7 @@ lsPoint ls_cs_world2screen(const lsCoordSystem* cs, const lsPoint* world)
  */
 lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem* cs, const lsPoint* screen, lsReal zoomLevel)
 {
-    //lsCoordSystem ret = *cs;// 将ret赋值成cs指针，局部变量坐标系ret变不改变整体cs变
-    //lsPoint pointBefore = ls_cs_world2screen(&ret, screen);
-    //ret.scale = zoomLevel;
-    //lsPoint pointAfter = ls_cs_world2screen(&ret, screen);
-
-    //lsVector vectorBefore = ls_point_p2v(&pointBefore);
-    //lsVector vectorAfter = ls_point_p2v(&pointAfter);
-    //lsVector worldTranslate = ls_vector_sub(&vectorBefore, &vectorAfter);
-    //ret.origin = ls_vector_add(&cs->origin, &worldTranslate);
-
-    lsCoordSystem ret;
+    /*lsCoordSystem ret;
     lsPoint pointBefore = ls_cs_screen2world(cs, screen);
     ret.scale = zoomLevel;
     lsPoint pointAfter = ls_cs_screen2world(cs, screen);
@@ -279,23 +269,34 @@ lsCoordSystem ls_canvas_zoom_around_point(const lsCoordSystem* cs, const lsPoint
     lsVector vectorBefore = ls_point_p2v(&pointBefore);
     lsVector vectorAfter = ls_point_p2v(&pointAfter);
     lsVector worldTranslate = ls_vector_sub(&vectorBefore, &vectorAfter);
+    ret.origin = ls_vector_add(&cs->origin, &worldTranslate);*/
+
+    lsCoordSystem ret = *cs;// 将ret赋值成cs指针，局部变量坐标系ret变不改变整体cs变
+    lsPoint pointBefore = ls_cs_world2screen(&ret, screen);
+    ret.scale = zoomLevel;
+    lsPoint pointAfter = ls_cs_world2screen(&ret, screen);
+
+    lsVector vectorBefore = ls_point_p2v(&pointBefore);
+    lsVector vectorAfter = ls_point_p2v(&pointAfter);
+    lsVector worldTranslate = ls_vector_sub(&vectorBefore, &vectorAfter);
     ret.origin = ls_vector_add(&cs->origin, &worldTranslate);
-    
+
+
     return ret;
 }
 
 /**
- * @brief 计算视口坐标系 \p cs 拖拽后的新的视口坐标系
- *
- * @param cs
- * @param screenStart
- * @param screenEnd
- * @return lsCoordSystem
- */
+* @brief 计算视口坐标系 \p cs 拖拽后的新的视口坐标系
+*
+* @param cs
+* @param screenStart
+* @param screenEnd
+* @return lsCoordSystem
+*/
 lsCoordSystem ls_canvas_translate_around_point(const lsCoordSystem* cs, const lsVector* screen)
 {
-    lsCoordSystem ret=*cs;
-    lsVector vector =*screen;
+    lsCoordSystem ret = *cs;
+    lsVector vector = *screen;
     lsVector worldTranslate = ls_vector_scale(&vector, -ret.scale);
     ret.origin = ls_vector_add(&cs->origin, &worldTranslate);
 
@@ -325,6 +326,7 @@ void ls_canvas_redraw(lsCanvas* canvas)
         // 按下HOME键，重置视口
         lsBoundbox box = ls_entity_get_boundbox(canvas->entitys);
         lsPoint boxCenter = ls_boundbox_center(&box);
+        canvas->vcs.origin = ls_point_p2v(&boxCenter);
         lsPoint boundboxLeft = ls_boundbox_min(&box);
         canvas->vcs.origin = ls_point_p2v(&boundboxLeft);
         canvas->vcs.scale = 1.0;
@@ -335,27 +337,22 @@ void ls_canvas_redraw(lsCanvas* canvas)
     {
         canvas->bZoom = false;
         canvas->vcs = ls_canvas_zoom_around_point(&canvas->vcs, &canvas->zoomCenter, canvas->zoomFactor);
-       
     }
-  
+
+    // 拖拽触发，计算拖拽后的视口再显示
     if (canvas->bDrag)
     {
         canvas->bDrag = false;
         canvas->vcs = ls_canvas_translate_around_point(&canvas->vcs, &canvas->dragVector_V);
-     
+
     }
-  
     for (size_t i = 0; i < canvas->entitys.size(); ++i)
     {
-       
-
         lsEntity entity = canvas->entitys[i];
-      
         entity = ls_entity_transform(&entity, &canvas->vcs);
-      
         ls_canvas_draw_entity(canvas, &entity);
-        // 拖拽触发，计算拖拽后的视口再显示
-     
+        
+        
     }
 
     canvas->bDirty = false;
@@ -392,8 +389,8 @@ void ls_canvas_polling(lsCanvas* canvas)
 
         case WM_MBUTTONUP:
         {
-            canvas->bDrag = false;
             canvas->bDirty = true;
+            canvas->bDrag = false;
 
             canvas->dragEndPoint.x = msg.x;
             canvas->dragEndPoint.y = msg.y;
@@ -401,7 +398,7 @@ void ls_canvas_polling(lsCanvas* canvas)
             canvas->dragVector_P.x = msg.x - canvas->dragStartPoint.x;
             canvas->dragVector_P.y = msg.y - canvas->dragStartPoint.y;
             canvas->dragVector_V = ls_point_p2v(&canvas->dragVector_P);
-         
+          
             break;
         }
 
@@ -412,7 +409,6 @@ void ls_canvas_polling(lsCanvas* canvas)
                 canvas->bDirty = true;
                 canvas->dragEndPoint.x = msg.x;
                 canvas->dragEndPoint.y = msg.y;
-             
             }
             break;
         }

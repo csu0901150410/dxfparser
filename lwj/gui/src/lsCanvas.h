@@ -21,8 +21,7 @@ typedef struct
     bool bDrag;// 图形拖动标记
     lsPoint dragStartPoint;// 拖动开始点
     lsPoint dragVector_P;// 拖动平移向量_点
-    lsPoint dragEndPoint;// 拖动结束点
-    
+    lsPoint dragEndPoint;
     lsVector dragVector_V;// 拖动平移向量_矢量
 
     bool bZoom;//缩放标记
