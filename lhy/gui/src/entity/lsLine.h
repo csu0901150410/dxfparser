@@ -20,4 +20,8 @@ lsLine ls_line_translate(const lsLine *line, const lsVector *vector);
 
 lsLine ls_line_transform(const lsLine *l, const lsCoordSystem *cs);
 
+lsReal ls_line_get_length(const lsLine *line);
+
+lsLine ls_line_random_line(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy);
+
 #endif // LS_LINE_H

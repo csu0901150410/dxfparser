@@ -19,6 +19,9 @@
     <Filter Include="entity">
       <UniqueIdentifier>{2112ce07-8f21-4d81-bcaa-94276b2f6f40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{ba6727a9-1a3f-43c0-96bd-39cd9989063e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="src\entity\lsCoordSystem.cpp">
       <Filter>entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\tools\lsRandom.cpp">
+      <Filter>tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
@@ -88,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="src\entity\lsCoordSystem.h">
       <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\lsRandom.h">
+      <Filter>tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

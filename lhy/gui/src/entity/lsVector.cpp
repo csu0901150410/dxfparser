@@ -1,6 +1,7 @@
 ﻿#include <math.h>
 
 #include "lsVector.h"
+#include "lsRandom.h"
 
 // TODO : 或许还得写个lsMath
 /**
@@ -238,5 +239,13 @@ lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsRea
     ret = ls_vector_add(v, translate);
     ret = ls_vector_scale(&ret, scale);
     ret.invalid = v->invalid || translate->invalid;
+    return ret;
+}
+
+lsVector ls_vector_random_vector(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy)
+{
+    lsVector ret;
+    ret.x = RandomReal(lowx, highx);
+    ret.y = RandomReal(lowy, highy);
     return ret;
 }

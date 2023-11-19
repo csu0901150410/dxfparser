@@ -15,4 +15,6 @@ lsPoint ls_point_scale(const lsPoint *p, lsReal scale);
 
 lsPoint ls_point_transform(const lsPoint *p, const lsCoordSystem *cs);
 
+lsPoint ls_point_random_point(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy);
+
 #endif // LS_POINT_H

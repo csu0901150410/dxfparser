@@ -123,6 +123,15 @@ void ls_canvas_load_entity_test(lsCanvas *canvas)
     circle.c = {15783, 3365};
     circle.r = 100;
     ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
+
+    // 生成一些随机的线段
+    lsReal w = ls_canvas_get_w(canvas);
+    lsReal h = ls_canvas_get_h(canvas);
+    for (size_t i = 0; i < 100; ++i)
+    {
+        lsLine line = ls_line_random_line(0, 0, w, h);
+        ls_canvas_add_entity(canvas, ls_entity_convert_line(&line));
+    }
 }
 
 /**
@@ -237,7 +246,6 @@ void ls_canvas_redraw(lsCanvas *canvas)
 
         // 按下HOME键，重置视口
         lsBoundbox box = ls_entity_get_boundbox(canvas->entitys);
-        lsVector boxCenter = ls_boundbox_center(&box);
         canvas->vcs.origin = ls_boundbox_get_min(&box);
         canvas->vcs.scale = 1.0;
     }

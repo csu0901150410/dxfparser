@@ -131,4 +131,6 @@ bool ls_vector_is_valid(const lsVector *v);
 
 lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsReal scale);
 
+lsVector ls_vector_random_vector(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy);
+
 #endif // LS_VECTOR_H
