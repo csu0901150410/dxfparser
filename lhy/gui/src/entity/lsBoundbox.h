@@ -5,8 +5,8 @@
 
 typedef struct _lsBoundbox
 {
-    lsVector c1;// boundbox diagonal corner 1
-    lsVector c2;// boundbox diagonal corner 2
+    lsVector minc;// min corner (minx, miny)
+    lsVector maxc;// max corner (maxx, maxy)
 } lsBoundbox;
 
 lsBoundbox ls_boundbox_init();
@@ -30,10 +30,6 @@ lsVector ls_boundbox_center(const lsBoundbox *box);
 lsBoundbox ls_boundbox_scale(const lsBoundbox *box, lsReal scale);
 
 lsBoundbox ls_boundbox_transform(const lsBoundbox *box, const lsCoordSystem *cs);
-
-lsVector ls_boundbox_get_corner1(const lsBoundbox *box);
-
-lsVector ls_boundbox_get_corner2(const lsBoundbox *box);
 
 bool ls_boundbox_overlap(const lsBoundbox *box1, const lsBoundbox *box2);
 

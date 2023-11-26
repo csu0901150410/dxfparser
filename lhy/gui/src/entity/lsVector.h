@@ -7,12 +7,9 @@ typedef struct
 {
     lsReal x;
     lsReal y;
-    lsReal z;
-    lsReal w;
-    bool invalid;
+    lsReal z;// 暂时不用，当前只考虑2D的情况，设为0即可
+    lsReal w;// 齐次坐标 Ref : http://www.songho.ca/math/homogeneous/homogeneous.html
 } lsVector;
-
-static const lsVector invalidVector = {0, 0, 0, 0, true};
 
 /**
  * @brief 实数插值
@@ -126,8 +123,6 @@ lsReal ls_vector_rotate_angle(const lsVector *v1, const lsVector *v2, bool bccw)
 lsVector ls_vector_get_min(const lsVector *v1, const lsVector *v2);
 
 lsVector ls_vector_get_max(const lsVector *v1, const lsVector *v2);
-
-bool ls_vector_is_valid(const lsVector *v);
 
 lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsReal scale);
 

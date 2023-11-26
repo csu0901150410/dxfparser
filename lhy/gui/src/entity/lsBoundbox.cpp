@@ -3,74 +3,66 @@
 lsBoundbox ls_boundbox_init()
 {
     lsBoundbox box;
-    box.c1 = invalidVector;
-    box.c2 = invalidVector;
-    // box.c1.x = MAX_REAL;
-    // box.c1.y = MAX_REAL;
-    // box.c2.x = -MAX_REAL;
-    // box.c2.y = -MAX_REAL;
+    box.minc.x = MAX_REAL;
+    box.minc.y = MAX_REAL;
+    box.maxc.x = -MAX_REAL;
+    box.maxc.y = -MAX_REAL;
     return box;
 }
 
 bool ls_boundbox_is_valid(const lsBoundbox *box)
 {
-    return (ls_vector_is_valid(&box->c1) && ls_vector_is_valid(&box->c2));
+    return (box->minc.x < box->maxc.x) && (box->minc.y < box->maxc.y);
 }
 
 lsBoundbox ls_boundbox_create(const lsVector *v1, const lsVector *v2)
 {
     lsBoundbox ret;
-    ret.c1 = *v1;
-    ret.c2 = *v2;
+    ret.minc = ls_vector_get_min(v1, v2);
+    ret.maxc = ls_vector_get_max(v1, v2);
     return ret;
 }
 
 lsVector ls_boundbox_get_min(const lsBoundbox *box)
 {
-    return ls_vector_get_min(&box->c1, &box->c2);
+    return box->minc;
 }
 
 lsVector ls_boundbox_get_max(const lsBoundbox *box)
 {
-    return ls_vector_get_max(&box->c1, &box->c2);
+    return box->maxc;
 }
 
 lsBoundbox ls_boundbox_combine(const lsBoundbox *box1, const lsBoundbox *box2)
 {
     lsBoundbox ret;
-
-    lsVector min1 = ls_boundbox_get_min(box1);
-    lsVector max1 = ls_boundbox_get_max(box1);
-    lsVector min2 = ls_boundbox_get_min(box2);
-    lsVector max2 = ls_boundbox_get_max(box2);
-
-    ret.c1 = ls_vector_get_min(&min1, &min2);
-    ret.c2 = ls_vector_get_max(&max1, &max2);
+    ret.minc = ls_vector_get_min(&box1->minc, &box2->minc);
+    ret.maxc = ls_vector_get_min(&box1->maxc, &box2->maxc);
     return ret;
 }
 
 lsReal ls_boundbox_width(const lsBoundbox *box)
 {
-    return fabs(box->c1.x - box->c2.x);
+    return fabs(box->maxc.x - box->minc.x);
 }
 
 lsReal ls_boundbox_height(const lsBoundbox *box)
 {
-    return fabs(box->c1.y - box->c2.y);
+    return fabs(box->maxc.y - box->minc.y);
 }
 
 lsVector ls_boundbox_center(const lsBoundbox *box)
 {
-    lsVector ret = ls_vector_add(&box->c1, &box->c2);
-    ret = ls_vector_scale(&ret, 0.5);
+    lsVector ret = ls_vector_add(&box->minc, &box->maxc);
+    ret = ls_vector_scale(&ret, 0.5f);
     return ret;
 }
 
 lsBoundbox ls_boundbox_scale(const lsBoundbox *box, lsReal scale)
 {
     lsBoundbox ret;
-    ret.c1 = ls_vector_scale(&box->c1, scale);
-    ret.c2 = ls_vector_scale(&box->c2, scale);
+    ret.minc = ls_vector_scale(&box->minc, scale);
+    ret.maxc = ls_vector_scale(&box->maxc, scale);
     return ret;
 }
 
@@ -84,30 +76,15 @@ lsBoundbox ls_boundbox_scale(const lsBoundbox *box, lsReal scale)
 lsBoundbox ls_boundbox_transform(const lsBoundbox *box, const lsCoordSystem *cs)
 {
     lsBoundbox ret;
-    ret.c1 = ls_vector_transform(&box->c1, &cs->origin, cs->scale);
-    ret.c2 = ls_vector_transform(&box->c2, &cs->origin, cs->scale);
+    ret.minc = ls_vector_transform(&box->minc, &cs->origin, cs->scale);
+    ret.maxc = ls_vector_transform(&box->maxc, &cs->origin, cs->scale);
     return ret;
-}
-
-lsVector ls_boundbox_get_corner1(const lsBoundbox *box)
-{
-    return box->c1;
-}
-
-lsVector ls_boundbox_get_corner2(const lsBoundbox *box)
-{
-    return box->c2;
 }
 
 // 判断两包围盒是否重叠
 bool ls_boundbox_overlap(const lsBoundbox *box1, const lsBoundbox *box2)
 {
-    lsVector v1min = ls_boundbox_get_min(box1);
-    lsVector v1max = ls_boundbox_get_max(box1);
-    lsVector v2min = ls_boundbox_get_min(box2);
-    lsVector v2max = ls_boundbox_get_max(box2);
-
-    if (v1min.x > v2max.x || v1max.x < v2min.x || v1min.y > v2max.y || v1max.y < v2min.y)
-        return false;
-    return true;
+    // 不可能重叠的情况
+    return !(box1->minc.x > box2->maxc.x || box1->minc.y > box2->maxc.y ||
+             box1->maxc.x < box2->minc.x || box1->maxc.y < box2->minc.y);
 }

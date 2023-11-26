@@ -41,7 +41,6 @@ lsVector ls_vector_add(const lsVector *v1, const lsVector *v2)
     lsVector ret;
     ret.x = v1->x + v2->x;
     ret.y = v1->y + v2->y;
-    ret.invalid = v1->invalid || v2->invalid;
     return ret;
 }
 
@@ -57,7 +56,6 @@ lsVector ls_vector_sub(const lsVector *v1, const lsVector *v2)
     lsVector ret;
     ret.x = v1->x - v2->x;
     ret.y = v1->y - v2->y;
-    ret.invalid = v1->invalid || v2->invalid;
     return ret;
 }
 
@@ -98,7 +96,6 @@ lsVector ls_vector_interp(const lsVector *v1, const lsVector *v2, lsReal t)
     lsVector ret;
     ret.x = _interp(v1->x, v2->x, t);
     ret.y = _interp(v1->y, v2->y, t);
-    ret.invalid = v1->invalid || v2->invalid;
     return ret;
 }
 
@@ -133,7 +130,6 @@ lsVector ls_vector_scale(const lsVector *v, lsReal factor)
     lsVector ret;
     ret.x = v->x * factor;
     ret.y = v->y * factor;
-    ret.invalid = v->invalid;
     return ret;
 }
 
@@ -163,7 +159,7 @@ lsReal ls_vector_include_angle(const lsVector *v1, const lsVector *v2)
 
     if (ll < EPS)
         return 0;
-    return acos(dot / ll);
+    return acos(dot / ll);// 为了不发生domain error，需要对输入值进行检测
 }
 
 /**
@@ -193,36 +189,17 @@ lsReal ls_vector_rotate_angle(const lsVector *v1, const lsVector *v2, bool bccw)
 lsVector ls_vector_get_min(const lsVector *v1, const lsVector *v2)
 {
     lsVector ret;
-    bool v1valid = ls_vector_is_valid(v1);
-    bool v2valid = ls_vector_is_valid(v2);
-    if (v1valid || v2valid)
-    {
-        // 至少有一个valid
-        ret.x = MIN(v1valid ? v1->x : MAX_REAL, v2valid ? v2->x : MAX_REAL);
-        ret.y = MIN(v1valid ? v1->y : MAX_REAL, v2valid ? v2->y : MAX_REAL);
-    }
-    ret.invalid = !v1valid && !v2valid;
+    ret.x = MIN(v1->x, v2->x);
+    ret.y = MIN(v1->y, v2->y);
     return ret;
 }
 
 lsVector ls_vector_get_max(const lsVector *v1, const lsVector *v2)
 {
     lsVector ret;
-    bool v1valid = ls_vector_is_valid(v1);
-    bool v2valid = ls_vector_is_valid(v2);
-    if (v1valid || v2valid)
-    {
-        // 至少有一个valid
-        ret.x = MAX(v1valid ? v1->x : -MAX_REAL, v2valid ? v2->x : -MAX_REAL);
-        ret.y = MAX(v1valid ? v1->y : -MAX_REAL, v2valid ? v2->y : -MAX_REAL);
-    }
-    ret.invalid = !v1valid && !v2valid;
+    ret.x = MAX(v1->x, v2->x);
+    ret.y = MAX(v1->y, v2->y);
     return ret;
-}
-
-bool ls_vector_is_valid(const lsVector *v)
-{
-    return !v->invalid;
 }
 
 /**
@@ -238,7 +215,6 @@ lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsRea
     lsVector ret;
     ret = ls_vector_add(v, translate);
     ret = ls_vector_scale(&ret, scale);
-    ret.invalid = v->invalid || translate->invalid;
     return ret;
 }
 
