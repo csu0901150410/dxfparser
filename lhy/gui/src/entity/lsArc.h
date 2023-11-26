@@ -70,4 +70,13 @@ lsArc ls_arc_scale(const lsArc *arc, lsReal scale);
 
 lsArc ls_arc_transform(const lsArc *arc, const lsCoordSystem *cs);
 
+/**
+ * @brief 圆弧应用矩阵变换
+ * 
+ * @param arc 
+ * @param m 
+ * @return lsArc 
+ */
+lsArc ls_arc_transform_by(const lsArc *arc, const lsMatrix *m);
+
 #endif // LS_ARC_H

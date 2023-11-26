@@ -24,4 +24,13 @@ lsReal ls_line_get_length(const lsLine *line);
 
 lsLine ls_line_random_line(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy);
 
+/**
+ * @brief 线段应用矩阵变换
+ * 
+ * @param line 
+ * @param m 
+ * @return lsLine 
+ */
+lsLine ls_line_transform_by(const lsLine *line, const lsMatrix *m);
+
 #endif // LS_LINE_H

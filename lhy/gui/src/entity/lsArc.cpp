@@ -145,3 +145,11 @@ lsArc ls_arc_transform(const lsArc *arc, const lsCoordSystem *cs)
     ret.bccw = arc->bccw;
     return ret;
 }
+
+lsArc ls_arc_transform_by(const lsArc *arc, const lsMatrix *m)
+{
+    /**
+     * @brief 圆弧应用矩阵变换，结果是对圆弧所在整圆进行变换，截取部分，也不确定变换后是什么，暂不处理
+     * 
+     */
+}

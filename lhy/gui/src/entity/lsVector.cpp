@@ -225,3 +225,14 @@ lsVector ls_vector_random_vector(lsReal lowx, lsReal lowy, lsReal highx, lsReal 
     ret.y = RandomReal(lowy, highy);
     return ret;
 }
+
+lsVector ls_vector_transform_by(const lsVector *v, const lsMatrix *m)
+{
+    lsReal x = v->x, y = v->y, z = v->z, w = v->w;
+    lsVector ret;
+	ret.x = x * m->m[0][0] + y * m->m[1][0] + z * m->m[2][0] + w * m->m[3][0];
+	ret.y = x * m->m[0][1] + y * m->m[1][1] + z * m->m[2][1] + w * m->m[3][1];
+	ret.z = x * m->m[0][2] + y * m->m[1][2] + z * m->m[2][2] + w * m->m[3][2];
+	ret.w = x * m->m[0][3] + y * m->m[1][3] + z * m->m[2][3] + w * m->m[3][3];
+    return ret;
+}

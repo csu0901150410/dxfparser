@@ -2,6 +2,7 @@
 #define LS_VECTOR_H
 
 #include "lsGlobal.h"
+#include "lsMatrix.h"
 
 typedef struct
 {
@@ -127,5 +128,14 @@ lsVector ls_vector_get_max(const lsVector *v1, const lsVector *v2);
 lsVector ls_vector_transform(const lsVector *v, const lsVector *translate, lsReal scale);
 
 lsVector ls_vector_random_vector(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy);
+
+/**
+ * @brief 向量应用矩阵变换
+ * 
+ * @param v 
+ * @param m 
+ * @return lsVector 
+ */
+lsVector ls_vector_transform_by(const lsVector *v, const lsMatrix *m);
 
 #endif // LS_VECTOR_H

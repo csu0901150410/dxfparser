@@ -36,3 +36,10 @@ lsPoint ls_point_random_point(lsReal lowx, lsReal lowy, lsReal highx, lsReal hig
     ret.pos = ls_vector_random_vector(lowx, lowy, highx, highy);
     return ret;
 }
+
+lsPoint ls_point_transform_by(const lsPoint *p, const lsMatrix *m)
+{
+    lsPoint ret;
+    ret.pos = ls_vector_transform_by(&p->pos, m);
+    return ret;
+}

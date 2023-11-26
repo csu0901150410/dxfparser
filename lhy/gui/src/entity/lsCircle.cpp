@@ -40,3 +40,15 @@ lsCircle ls_circle_transform(const lsCircle *circle, const lsCoordSystem *cs)
     ret.r = circle->r * cs->scale;
     return ret;
 }
+
+lsCircle ls_circle_transform_by(const lsCircle *circle, const lsMatrix *m)
+{
+    /**
+     * @brief 整圆应用矩阵变换，得到的可能是整圆、椭圆、线段，先不处理
+     * 
+     * Ref : https://math.stackexchange.com/questions/258351/geometric-transformation-on-circle-equation
+     */
+
+    lsCircle ret;
+    return ret;
+}

@@ -54,3 +54,11 @@ lsLine ls_line_random_line(lsReal lowx, lsReal lowy, lsReal highx, lsReal highy)
 
     return ret;
 }
+
+lsLine ls_line_transform_by(const lsLine *line, const lsMatrix *m)
+{
+    lsLine ret;
+    ret.s = ls_vector_transform_by(&line->s, m);
+    ret.e = ls_vector_transform_by(&line->e, m);
+    return ret;
+}
