@@ -98,3 +98,16 @@ lsVector ls_boundbox_get_corner2(const lsBoundbox *box)
 {
     return box->c2;
 }
+
+// 判断两包围盒是否重叠
+bool ls_boundbox_overlap(const lsBoundbox *box1, const lsBoundbox *box2)
+{
+    lsVector v1min = ls_boundbox_get_min(box1);
+    lsVector v1max = ls_boundbox_get_max(box1);
+    lsVector v2min = ls_boundbox_get_min(box2);
+    lsVector v2max = ls_boundbox_get_max(box2);
+
+    if (v1min.x > v2max.x || v1max.x < v2min.x || v1min.y > v2max.y || v1max.y < v2min.y)
+        return false;
+    return true;
+}

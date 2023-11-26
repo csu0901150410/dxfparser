@@ -35,4 +35,6 @@ lsVector ls_boundbox_get_corner1(const lsBoundbox *box);
 
 lsVector ls_boundbox_get_corner2(const lsBoundbox *box);
 
+bool ls_boundbox_overlap(const lsBoundbox *box1, const lsBoundbox *box2);
+
 #endif // LS_BOUNDBOX_H

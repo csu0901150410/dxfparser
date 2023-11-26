@@ -127,7 +127,7 @@ void ls_canvas_load_entity_test(lsCanvas *canvas)
     // 生成一些随机的线段
     lsReal w = ls_canvas_get_w(canvas);
     lsReal h = ls_canvas_get_h(canvas);
-    for (size_t i = 0; i < 100; ++i)
+    for (size_t i = 0; i < 10; ++i)
     {
         lsLine line = ls_line_random_line(0, 0, w, h);
         ls_canvas_add_entity(canvas, ls_entity_convert_line(&line));
@@ -343,7 +343,7 @@ void ls_canvas_polling(lsCanvas *canvas)
                 if (canvas->zoomFactor == 0.2)
                     continue;
 
-                canvas->zoomFactor -= 0.05;
+                canvas->zoomFactor -= 0.1;
                 if (canvas->zoomFactor < 0.2)
                     canvas->zoomFactor = 0.2;
 
@@ -358,7 +358,7 @@ void ls_canvas_polling(lsCanvas *canvas)
                 if (canvas->zoomFactor > 10)
                     continue;
 
-                canvas->zoomFactor += 0.05;
+                canvas->zoomFactor += 0.1;
 
                 canvas->zoomCenter.x = msg.x;
                 canvas->zoomCenter.y = msg.y;

@@ -139,6 +139,7 @@
     <ClCompile Include="src\entity\lsCoordSystem.cpp" />
     <ClCompile Include="src\entity\lsEntity.cpp" />
     <ClCompile Include="src\entity\lsLine.cpp" />
+    <ClCompile Include="src\entity\lsMatrix.cpp" />
     <ClCompile Include="src\entity\lsPoint.cpp" />
     <ClCompile Include="src\entity\lsVector.cpp" />
     <ClCompile Include="src\lsCanvas.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="src\entity\lsEntity.h" />
     <ClInclude Include="src\entity\lsGlobal.h" />
     <ClInclude Include="src\entity\lsLine.h" />
+    <ClInclude Include="src\entity\lsMatrix.h" />
     <ClInclude Include="src\entity\lsPoint.h" />
     <ClInclude Include="src\entity\lsVector.h" />
     <ClInclude Include="src\lsCanvas.h" />

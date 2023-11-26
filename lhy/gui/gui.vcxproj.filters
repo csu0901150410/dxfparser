@@ -60,6 +60,9 @@
     <ClCompile Include="src\tools\lsRandom.cpp">
       <Filter>tools</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\lsMatrix.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsCanvas.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="src\tools\lsRandom.h">
       <Filter>tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsMatrix.h">
+      <Filter>entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
