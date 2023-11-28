@@ -8,6 +8,7 @@
 
 #include "lsEntity.h"
 #include "lsCoordSystem.h"
+#include "lsMatrix.h"
 
 typedef struct
 {
@@ -27,6 +28,8 @@ typedef struct
     lsReal zoomFactor;// 缩放系数
 
     bool bHome;
+
+    lsMatrix w2v;// world wo view transformation matrix
 
     std::vector<lsEntity> entitys;
 } lsCanvas;

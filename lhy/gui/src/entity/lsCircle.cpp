@@ -49,6 +49,9 @@ lsCircle ls_circle_transform_by(const lsCircle *circle, const lsMatrix *m)
      * Ref : https://math.stackexchange.com/questions/258351/geometric-transformation-on-circle-equation
      */
 
+    // 先假设变换的xy缩放因子相同
     lsCircle ret;
+    ret.c = ls_vector_transform_by(&circle->c, m);
+    ret.r = circle->r * ls_matrix_get_scale(m);
     return ret;
 }

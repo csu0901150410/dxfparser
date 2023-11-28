@@ -204,6 +204,17 @@ void ls_matrix_apply_scale(lsMatrix *m, lsReal x, lsReal y, lsReal z)
 }
 
 /**
+ * @brief 获取变换矩阵中的缩放因子
+ * 
+ * @param m 
+ * @return lsReal 
+ */
+lsReal ls_matrix_get_scale(const lsMatrix *m)
+{
+    return m->m[3][0];
+}
+
+/**
  * @brief 矩阵设置为旋转矩阵。旋转通过轴角表示
  * 
  * Ref : https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle

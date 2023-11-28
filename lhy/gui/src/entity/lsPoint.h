@@ -1,4 +1,4 @@
-#ifndef LS_POINT_H
+﻿#ifndef LS_POINT_H
 #define LS_POINT_H
 
 #include "lsVector.h"

@@ -152,4 +152,13 @@ lsArc ls_arc_transform_by(const lsArc *arc, const lsMatrix *m)
      * @brief 圆弧应用矩阵变换，结果是对圆弧所在整圆进行变换，截取部分，也不确定变换后是什么，暂不处理
      * 
      */
+
+    // 先假设变换的xy缩放因子相同
+    lsArc ret;
+    ret.s = ls_vector_transform_by(&arc->s, m);
+    ret.e = ls_vector_transform_by(&arc->e, m);
+    ret.c = ls_vector_transform_by(&arc->c, m);
+    ret.bccw = arc->bccw;
+    ret.valid = arc->valid;
+    return ret;
 }

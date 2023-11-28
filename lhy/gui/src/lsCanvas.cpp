@@ -22,6 +22,8 @@ void ls_canvas_param_reset(lsCanvas *canvas)
     canvas->zoomFactor = 1.0;
 
     canvas->bHome = true;
+
+    ls_matrix_set_identity(&canvas->w2v);
 }
 
 /**
@@ -83,55 +85,34 @@ lsVector ls_canvas_get_center(lsCanvas *canvas)
 // lhy test
 void ls_canvas_load_entity_test(lsCanvas *canvas)
 {
-    // lsBoundbox box;
+    lsVector lb = {300, 200};
+    lsVector lt = {300, 500};
+    lsVector rt = {700, 500};
+    lsVector rb = {700, 200};
 
-    // lsReal wndw = ls_canvas_get_w(canvas);
-    // lsReal wndh = ls_canvas_get_h(canvas);
+    lsLine left     = {lb, lt};
+    lsLine top      = {lt, rt};
+    lsLine right    = {rt, rb};
+    lsLine bottom   = {rb, lb};
 
-    // box.left = wndw * (1 / 4.0);
-    // box.right = wndw * (3 / 4.0);
-    // box.bottom = wndh * (1 / 4.0);
-    // box.top = wndh * (2 / 4.0);
-
-    // lsPoint bl = {box.left, box.bottom};
-    // lsPoint tl = {box.left, box.top};
-    // lsPoint tr = {box.right, box.top};
-    // lsPoint br = {box.right, box.bottom};
-
-    // lsLine left = {bl, tl};
-    // lsLine top = {tl, tr};
-    // lsLine right = {tr, br};
-    // lsLine bottom = {br, bl};
-
-    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
-    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
-    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
-    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
+    ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
+    ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
+    ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
+    ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
 
     // lsCircle circle;
-    // circle.c = {canvas->w / 2.0, canvas->h / 2.0};
-    // circle.r = MIN(circle.c.x, circle.c.y);
+    // circle.c = {15783, 3365};
+    // circle.r = 100;
     // ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
 
-    // lsPoint ps = {100, 200};
-    // lsPoint pa = {150, 185};
-    // lsPoint pe = {230, 240};
-    // lsArc circlearc = ls_arc_construct_from_ppp(ps, pa, pe);
-    // ls_canvas_add_entity(canvas, ls_entity_convert_arc(&circlearc));
-
-    lsCircle circle;
-    circle.c = {15783, 3365};
-    circle.r = 100;
-    ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
-
-    // 生成一些随机的线段
-    lsReal w = ls_canvas_get_w(canvas);
-    lsReal h = ls_canvas_get_h(canvas);
-    for (size_t i = 0; i < 10; ++i)
-    {
-        lsLine line = ls_line_random_line(0, 0, w, h);
-        ls_canvas_add_entity(canvas, ls_entity_convert_line(&line));
-    }
+    // // 生成一些随机的线段
+    // lsReal w = ls_canvas_get_w(canvas);
+    // lsReal h = ls_canvas_get_h(canvas);
+    // for (size_t i = 0; i < 10; ++i)
+    // {
+    //     lsLine line = ls_line_random_line(0, 0, w, h);
+    //     ls_canvas_add_entity(canvas, ls_entity_convert_line(&line));
+    // }
 }
 
 /**

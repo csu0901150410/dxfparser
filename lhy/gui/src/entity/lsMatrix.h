@@ -123,6 +123,14 @@ void ls_matrix_apply_translate(lsMatrix *m, lsReal x, lsReal y, lsReal z);
 void ls_matrix_set_scale(lsMatrix *m, lsReal x, lsReal y, lsReal z);
 
 /**
+ * @brief 获取变换矩阵中的缩放因子
+ * 
+ * @param m 
+ * @return lsReal 
+ */
+lsReal ls_matrix_get_scale(const lsMatrix *m);
+
+/**
  * @brief 应用缩放变换
  * 
  * @param m 
