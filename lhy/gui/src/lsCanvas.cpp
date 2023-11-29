@@ -85,34 +85,64 @@ lsVector ls_canvas_get_center(lsCanvas *canvas)
 // lhy test
 void ls_canvas_load_entity_test(lsCanvas *canvas)
 {
-    lsVector lb = {300, 200};
-    lsVector lt = {300, 500};
-    lsVector rt = {700, 500};
-    lsVector rb = {700, 200};
+    // lsVector lb = {300, 200};
+    // lsVector lt = {300, 500};
+    // lsVector rt = {700, 500};
+    // lsVector rb = {700, 200};
 
-    lsLine left     = {lb, lt};
-    lsLine top      = {lt, rt};
-    lsLine right    = {rt, rb};
-    lsLine bottom   = {rb, lb};
+    // lsLine left     = {lb, lt};
+    // lsLine top      = {lt, rt};
+    // lsLine right    = {rt, rb};
+    // lsLine bottom   = {rb, lb};
 
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
-    ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&left));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&top));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&right));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&bottom));
 
     // lsCircle circle;
     // circle.c = {15783, 3365};
     // circle.r = 100;
     // ls_canvas_add_entity(canvas, ls_entity_convert_circle(&circle));
 
-    // // 生成一些随机的线段
-    // lsReal w = ls_canvas_get_w(canvas);
-    // lsReal h = ls_canvas_get_h(canvas);
-    // for (size_t i = 0; i < 10; ++i)
-    // {
-    //     lsLine line = ls_line_random_line(0, 0, w, h);
-    //     ls_canvas_add_entity(canvas, ls_entity_convert_line(&line));
-    // }
+    std::vector<lsLine> lines;
+
+    // 生成一些随机的线段
+    lsReal w = ls_canvas_get_w(canvas);
+    lsReal h = ls_canvas_get_h(canvas);
+    for (size_t i = 0; i < 10; ++i)
+    {
+        lsLine line = ls_line_random_line(0, 0, w, h);
+        ls_canvas_add_entity(canvas, ls_entity_convert_line(&line));
+
+        lines.push_back(line);
+    }
+
+    // // lhy test 测试基本的两条相交线段
+    // lsLine l1;
+    // l1.s = {200, 300};
+    // l1.e = {500, 300};
+    // lsLine l2;
+    // l2.s = {400, 100};
+    // l2.e = {400, 500};
+
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&l1));
+    // ls_canvas_add_entity(canvas, ls_entity_convert_line(&l2));
+
+    // lines.push_back(l1);
+    // lines.push_back(l2);
+
+    // 所有线段求交点，以圆的方式加入实体，方便观察
+    std::vector<lsVector> intersections;
+    ls_line_find_lines_intersections_naive(lines, intersections);
+
+    for (const auto& cross : intersections)
+    {
+        lsCircle cir;
+        cir.c = {cross.x, cross.y};
+        cir.r = 10;
+        ls_canvas_add_entity(canvas, ls_entity_convert_circle(&cir));
+    }
 }
 
 /**
@@ -355,6 +385,12 @@ void ls_canvas_polling(lsCanvas *canvas)
             else if (VK_HOME == msg.vkcode)
             {
                 // 按下HOME键，回到初始显示状态
+                ls_canvas_param_reset(canvas);
+            }
+            else if (VK_F5 == msg.vkcode)
+            {
+                canvas->entitys.clear();
+                ls_canvas_load_entity_test(canvas);
                 ls_canvas_param_reset(canvas);
             }
             break;

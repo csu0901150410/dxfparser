@@ -62,3 +62,44 @@ lsLine ls_line_transform_by(const lsLine *line, const lsMatrix *m)
     ret.e = ls_vector_transform_by(&line->e, m);
     return ret;
 }
+
+bool ls_line_intersect(const lsLine *m, const lsLine *n, lsVector *p)
+{
+    lsVector mes = ls_vector_sub(&m->s, &m->e);
+    lsVector nes = ls_vector_sub(&n->s, &n->e);
+    lsVector ss = ls_vector_sub(&m->s, &n->s);
+
+    lsReal dinominator = ls_vector_cross(&mes, &nes);
+    if (fabs(dinominator) < EPS)
+        return false;// 共线了
+
+    lsReal t = ls_vector_cross(&ss, &nes) / dinominator;
+    lsReal u = ls_vector_cross(&ss, &mes) / dinominator;
+
+    if (t < 0 || t > 1 || u < 0 || u > 1)
+        return false;
+    
+    lsVector mse = ls_vector_scale(&mes, -1.0 * t);// 反向，由开始点指向结束点（即直线方向向量），再缩放到t倍
+    *p = ls_vector_add(&m->s, &mse);// 开始点 + 缩放后的方向向量 = 结束点（交点）
+    return true;
+}
+
+void ls_line_find_lines_intersections_naive(const std::vector<lsLine>& lines, std::vector<lsVector>& intersections)
+{
+    for (size_t i = 0; i < lines.size(); ++i)
+    {
+        const lsLine& iLine = lines[i];
+
+        // 以此和后续所有线段求交点
+        for (size_t j = i + 1; j < lines.size(); ++j)
+        {
+            const lsLine& jLine = lines[j];
+
+            lsVector cross;
+            if (ls_line_intersect(&iLine, &jLine, &cross))
+            {
+                intersections.push_back(cross);
+            }
+        }
+    }
+}
