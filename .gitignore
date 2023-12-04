@@ -7,6 +7,7 @@ lhy/.vs/
 lhy/.vscode/
 lhy/x64/
 lhy/gui/x64/
+lhy/wxApp/x64/
 res/
 
 !lhy/res/
