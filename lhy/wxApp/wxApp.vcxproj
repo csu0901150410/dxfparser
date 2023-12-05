@@ -18,6 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\minimal.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -76,7 +79,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(ProjectDir)src;$(SolutionDir)res</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -108,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_UNICODE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(ProjectDir)src;$(SolutionDir)res</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,9 +137,6 @@
       <AdditionalLibraryDirectories>$(ENV_wxWidgets)\lib\vc_x64_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
