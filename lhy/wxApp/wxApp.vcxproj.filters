@@ -15,8 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\minimal.cpp">
+    <ClCompile Include="src\lsApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\lsFrame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\lsApp.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lsCommon.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lsFrame.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
