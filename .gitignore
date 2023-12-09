@@ -1,24 +1,20 @@
-# 默认忽略的文件，自己IDE或者编辑器的配置需要忽略
-.idea/
-.vscode/
+# 忽略所有IDE或者编辑器的配置文件
+**/.idea/
+**/.vs/
+**/.vscode/
 
 lhy/*.exe
-lhy/.vs/
-lhy/.vscode/
-lhy/x64/
-lhy/gui/x64/
-lhy/wxApp/x64/
 res/
 
+# 忽略所有编译产生的x64以及Debug文件夹
+**/Debug/
+**/x64/
+
+# 不能忽略的文件夹
 !lhy/res/
 
 
 # lwj文件夹下的规则，和lhy保持一致，仅lhy->lwj路径修改
 lwj/*.exe
-lwj/.vs/
-lwj/.vscode/
-lwj/x64/
-lwj/gui/x64/
-res/
 
 !lwj/res/

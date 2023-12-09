@@ -3,6 +3,8 @@
 
 #include "lsCommon.h"
 
+class lsCanvas;
+
 class lsFrame : public wxFrame
 {
 public:
@@ -10,7 +12,9 @@ public:
 
 public:
     void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
+
+public:
+    lsCanvas *m_canvas;
 
 private:
     wxDECLARE_EVENT_TABLE();

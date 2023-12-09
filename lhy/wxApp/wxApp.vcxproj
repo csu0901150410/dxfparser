@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\lsApp.cpp" />
+    <ClCompile Include="src\lsCanvas.cpp" />
     <ClCompile Include="src\lsFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lsApp.h" />
+    <ClInclude Include="src\lsCanvas.h" />
     <ClInclude Include="src\lsCommon.h" />
     <ClInclude Include="src\lsFrame.h" />
   </ItemGroup>
@@ -85,10 +87,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)res;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ENV_wxWidgets)\lib\vc_lib;</AdditionalLibraryDirectories>
     </Link>
@@ -117,7 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_UNICODE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)\res</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)res;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

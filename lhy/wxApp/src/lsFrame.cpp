@@ -1,8 +1,12 @@
 ﻿#include "lsFrame.h"
+#include "lsApp.h"
+#include "lsCanvas.h"
 
+#include "sample.xpm"
+
+// 事件表绑定
 wxBEGIN_EVENT_TABLE(lsFrame, wxFrame)
     EVT_MENU(kMenuQuit, lsFrame::OnQuit)
-    EVT_MENU(kMenuAbout, lsFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 // member methods implementation
@@ -11,26 +15,26 @@ lsFrame::lsFrame(const wxString& title)
     : wxFrame(NULL, wxID_ANY, title)
 {
     wxMenu *fileMenu = new wxMenu;
-    wxMenu *helpMenu = new wxMenu;
-
     fileMenu->Append(kMenuQuit, "E&xit\tAlt-X", "退出应用");
-    helpMenu->Append(kMenuAbout, "&About", "关于");
-
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(fileMenu, "&File");
-    menuBar->Append(helpMenu, "&Help");
 
     SetMenuBar(menuBar);
 
+    // 界面布局
+    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+
+    // 实例化绘图窗口
+    m_canvas = new lsCanvas(this);
+    sizer->Add(m_canvas, 1, wxEXPAND);
+
+    SetSizer(sizer);
     SetSize(wxSize(800, 600));
+    SetAutoLayout(true);
+    SetIcon(wxIcon(sample_xpm));
 }
 
-void lsFrame::OnQuit(wxCommandEvent& event)
+void lsFrame::OnQuit(wxCommandEvent &event)
 {
     Close(true);
-}
-
-void lsFrame::OnAbout(wxCommandEvent& event)
-{
-    wxMessageBox(wxString::Format("帮助界面 %d", 2023), "Title", wxOK | wxICON_INFORMATION, this);
 }

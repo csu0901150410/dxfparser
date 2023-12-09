@@ -1,5 +1,4 @@
 ﻿#include "lsApp.h"
-#include "lsFrame.h"
 
 wxIMPLEMENT_APP(lsApp);
 
@@ -10,7 +9,7 @@ bool lsApp::OnInit()
     if (!wxApp::OnInit())
         return false;
 
-    lsFrame *frame = new lsFrame("lsApp");
-    frame->Show(true);
+    m_frame = new lsFrame("lsApp");
+    m_frame->Show(true);
     return true;
 }
