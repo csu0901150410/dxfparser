@@ -19,15 +19,40 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\entity\lsArc.cpp" />
+    <ClCompile Include="src\entity\lsBoundbox.cpp" />
+    <ClCompile Include="src\entity\lsCircle.cpp" />
+    <ClCompile Include="src\entity\lsContour.cpp" />
+    <ClCompile Include="src\entity\lsCoordSystem.cpp" />
+    <ClCompile Include="src\entity\lsEdge.cpp" />
+    <ClCompile Include="src\entity\lsEntity.cpp" />
+    <ClCompile Include="src\entity\lsLine.cpp" />
+    <ClCompile Include="src\entity\lsMatrix.cpp" />
+    <ClCompile Include="src\entity\lsPoint.cpp" />
+    <ClCompile Include="src\entity\lsVector.cpp" />
     <ClCompile Include="src\lsApp.cpp" />
     <ClCompile Include="src\lsCanvas.cpp" />
     <ClCompile Include="src\lsFrame.cpp" />
+    <ClCompile Include="src\tools\lsRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entity\lsArc.h" />
+    <ClInclude Include="src\entity\lsBoundbox.h" />
+    <ClInclude Include="src\entity\lsCircle.h" />
+    <ClInclude Include="src\entity\lsContour.h" />
+    <ClInclude Include="src\entity\lsCoordSystem.h" />
+    <ClInclude Include="src\entity\lsEdge.h" />
+    <ClInclude Include="src\entity\lsEntity.h" />
+    <ClInclude Include="src\entity\lsGlobal.h" />
+    <ClInclude Include="src\entity\lsLine.h" />
+    <ClInclude Include="src\entity\lsMatrix.h" />
+    <ClInclude Include="src\entity\lsPoint.h" />
+    <ClInclude Include="src\entity\lsVector.h" />
     <ClInclude Include="src\lsApp.h" />
     <ClInclude Include="src\lsCanvas.h" />
     <ClInclude Include="src\lsCommon.h" />
     <ClInclude Include="src\lsFrame.h" />
+    <ClInclude Include="src\tools\lsRandom.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -87,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)res;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_UNICODE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)res;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)res;$(ProjectDir)src\tools;$(ProjectDir)src\entity</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,7 +160,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_UNICODE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)\res</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ENV_wxWidgets)\include;$(ENV_wxWidgets)\include\msvc;$(SolutionDir)res;$(ProjectDir)src\tools;$(ProjectDir)src\entity</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

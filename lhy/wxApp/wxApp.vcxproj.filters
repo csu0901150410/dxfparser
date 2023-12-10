@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{4bddce6a-b166-46a7-8687-c96296b06787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="entity">
+      <UniqueIdentifier>{cc63442c-906d-4c65-b3ee-d10b587dd458}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\lsApp.cpp">
@@ -23,6 +29,42 @@
     </ClCompile>
     <ClCompile Include="src\lsCanvas.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsArc.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsBoundbox.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsCircle.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsContour.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsCoordSystem.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsEdge.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsEntity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsLine.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsMatrix.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsPoint.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\lsVector.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\lsRandom.cpp">
+      <Filter>tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +79,45 @@
     </ClInclude>
     <ClInclude Include="src\lsCanvas.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsArc.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsBoundbox.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsCircle.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsContour.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsCoordSystem.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsEdge.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsEntity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsGlobal.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsLine.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsMatrix.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsPoint.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\lsVector.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\lsRandom.h">
+      <Filter>tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

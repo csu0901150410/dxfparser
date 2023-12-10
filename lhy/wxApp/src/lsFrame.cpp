@@ -21,6 +21,13 @@ lsFrame::lsFrame(const wxString& title)
 
     SetMenuBar(menuBar);
 
+    // 工具栏
+    wxToolBar *toolBar = new wxToolBar(this, wxID_ANY);
+    wxBitmap bmpToolIcon(sample_xpm);
+    toolBar->AddTool(wxID_ANY, "Test", bmpToolIcon);
+    toolBar->Realize();
+    SetToolBar(toolBar);
+
     // 界面布局
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
 

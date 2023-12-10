@@ -5,6 +5,8 @@
 
 #include "lsFrame.h"
 
+#include "lsEntity.h"
+
 class lsCanvas : public wxPanel
 {
 public:
@@ -14,6 +16,12 @@ public:
 public:
     void OnPaint(wxPaintEvent &event);
     void render(wxDC &dc);
+
+public:
+    void loadRandomEntity();
+
+public:
+    std::vector<lsEntity> m_entitys;
 
 private:
     wxDECLARE_EVENT_TABLE();
