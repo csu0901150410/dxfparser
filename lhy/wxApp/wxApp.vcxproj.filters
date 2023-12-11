@@ -16,8 +16,11 @@
     <Filter Include="tools">
       <UniqueIdentifier>{4bddce6a-b166-46a7-8687-c96296b06787}</UniqueIdentifier>
     </Filter>
-    <Filter Include="entity">
-      <UniqueIdentifier>{cc63442c-906d-4c65-b3ee-d10b587dd458}</UniqueIdentifier>
+    <Filter Include="lib">
+      <UniqueIdentifier>{1cdfe5f0-b855-4973-b59b-9ed52d32f785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\engine">
+      <UniqueIdentifier>{04e47f77-e937-4fb9-9f1d-86a62419c543}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,41 +33,17 @@
     <ClCompile Include="src\lsCanvas.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\entity\lsArc.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsBoundbox.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsCircle.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsContour.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsCoordSystem.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsEdge.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsEntity.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsLine.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsMatrix.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsPoint.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\lsVector.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
     <ClCompile Include="src\tools\lsRandom.cpp">
       <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib\engine\lsVector.cpp">
+      <Filter>lib\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib\engine\lsPoint.cpp">
+      <Filter>lib\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib\engine\lsLine.cpp">
+      <Filter>lib\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,44 +59,17 @@
     <ClInclude Include="src\lsCanvas.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\entity\lsArc.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsBoundbox.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsCircle.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsContour.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsCoordSystem.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsEdge.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsEntity.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsGlobal.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsLine.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsMatrix.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsPoint.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\lsVector.h">
-      <Filter>entity</Filter>
-    </ClInclude>
     <ClInclude Include="src\tools\lsRandom.h">
       <Filter>tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\engine\lsVector.h">
+      <Filter>lib\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\engine\lsPoint.h">
+      <Filter>lib\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\engine\lsLine.h">
+      <Filter>lib\engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

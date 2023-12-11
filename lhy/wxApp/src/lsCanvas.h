@@ -5,7 +5,8 @@
 
 #include "lsFrame.h"
 
-#include "lsEntity.h"
+#include "lsPoint.h"
+#include "lsLine.h"
 
 class lsCanvas : public wxPanel
 {
@@ -21,7 +22,8 @@ public:
     void loadRandomEntity();
 
 public:
-    std::vector<lsEntity> m_entitys;
+    std::vector<lsPoint> m_points;
+    std::vector<lsLine> m_lines;
 
 private:
     wxDECLARE_EVENT_TABLE();
