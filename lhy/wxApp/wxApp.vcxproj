@@ -29,6 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lib\engine\lsLine.h" />
+    <ClInclude Include="src\lib\engine\lsMath.h" />
+    <ClInclude Include="src\lib\engine\lsMatrix.h" />
     <ClInclude Include="src\lib\engine\lsPoint.h" />
     <ClInclude Include="src\lib\engine\lsVector.h" />
     <ClInclude Include="src\lsApp.h" />

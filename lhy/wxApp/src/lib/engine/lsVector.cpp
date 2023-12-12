@@ -1,6 +1,7 @@
 ﻿#include <cmath>
 
 #include "lsVector.h"
+#include "lsMath.h"
 
 lsVector::lsVector(lsReal vx, lsReal vy, lsReal vz)
     : x(vx), y(vy), z(vz), valid(true)
@@ -81,4 +82,40 @@ void lsVector::setPolar(lsReal radius, lsReal angle)
 lsVector lsVector::polar(lsReal rho, lsReal theta)
 {
     return {rho * std::cos(theta), rho * std::sin(theta), 0.0};
+}
+
+/**
+ * @brief 向量模长
+ * 
+ * @return lsReal 
+ */
+lsReal lsVector::magnitude() const
+{
+    if (!valid)
+        return NAN_REAL;
+    return sqrt(x * x + y * y + z * z);
+}
+
+/**
+ * @brief 向量单位化，并返回单位化后的单位向量
+ * 
+ * @return lsVector 
+ */
+lsVector lsVector::normalize()
+{
+    *this = getNormalized();
+    return *this;
+}
+
+/**
+ * @brief 计算当前向量的单位向量
+ * 
+ * @return lsVector 
+ */
+lsVector lsVector::getNormalized() const
+{
+    lsReal len = magnitude();
+    if (len < 1e-9)
+        return lsVector(false);
+    return lsVector(x / len, y / len, z / len);
 }

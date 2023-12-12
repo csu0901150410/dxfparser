@@ -71,5 +71,11 @@
     <ClInclude Include="src\lib\engine\lsLine.h">
       <Filter>lib\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\lib\engine\lsMath.h">
+      <Filter>lib\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\engine\lsMatrix.h">
+      <Filter>lib\engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

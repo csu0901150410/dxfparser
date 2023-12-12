@@ -27,6 +27,13 @@ public:
 
     static lsVector polar(lsReal rho, lsReal theta);
 
+    // 向量模长
+    lsReal magnitude() const;
+
+    lsVector normalize();
+
+    lsVector getNormalized() const;
+
     lsReal distanceTo(const lsVector& v) const;
 
     // 获取方向角
@@ -37,9 +44,6 @@ public:
 
     // 向量夹角，范围为[0, PI)
     lsReal angleBetween(const lsVector& v1, const lsVector& v2) const;
-
-    // 向量模长
-    lsReal magnitude() const;
 
 public:
     lsReal x = 0.0;
